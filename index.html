@@ -477,13 +477,15 @@ function refreshArt(){
 function clearNPC(){ const n=$('npc'); n.style.opacity=0; n.classList.remove('clickable'); n.onclick=null; }
 // 预热本场景全部立绘与背景（含战斗 NPC 的 sprite2 换人图）：
 // 配合 setNPC 的"加载完才显示"，保证任何换图瞬间都有正确立绘可用
-function preloadScene(){
+function preloadSceneData(sc){
+  if(!sc) return;
   const files=new Set(); const add=f=>{ if(f) files.add(f); };
-  add(S.cardBattleBackground); add(S.regularBackground); add(S.investigationDoneBackground);
-  S.backgrounds.forEach(bg=>{ add(bg.sprite); bg.npcs.forEach(n=>{ add(n.sprite); add(n.sprite2); }); });
-  S.cardBattleNpcs.forEach(n=>{ add(n.sprite); add(n.sprite2); });
+  add(sc.cardBattleBackground); add(sc.regularBackground); add(sc.investigationDoneBackground);
+  sc.backgrounds.forEach(bg=>{ add(bg.sprite); bg.npcs.forEach(n=>{ add(n.sprite); add(n.sprite2); }); });
+  sc.cardBattleNpcs.forEach(n=>{ add(n.sprite); add(n.sprite2); });
   files.forEach(f=>{ const im=new Image(); im.src=img(f); });
 }
+function preloadScene(){ preloadSceneData(S); }
 
 // ================= SCENE LOADING =================
 async function loadScene(key, opts={}){
@@ -850,6 +852,7 @@ async function endScene(win){
     else nextKey=null; // final win
   }
   const btn=$('endBtn');
+  if(win && nextKey) preloadSceneData(DATA[nextKey]); // 玩家看胜利文案时后台预热下一章美术
   if(win && nextKey){ btn.textContent='Next Chapter ▶'; btn.onclick=()=>loadScene(nextKey); }
   else if(win && !nextKey){ btn.textContent='★ You won the Presidency — Play Again'; btn.onclick=()=>restart(); }
   else { btn.textContent='↻ Retry Battle'; btn.onclick=()=>{ showScreen(null); startBattle(); }; }
@@ -1002,9 +1005,15 @@ async function boot(){
   // title bg
   $('titleScreen').style.backgroundImage=`url('${img('title.png')}')`;
   showScreen('titleScreen');
-  $('devinfo').textContent='beta v1.3.1 · collect all the evidence to earn a lottery code 🎟️';
+  $('devinfo').textContent='beta v1.3.2 · collect all the evidence to earn a lottery code 🎟️';
   // title music on first interaction
   document.body.addEventListener('pointerdown',()=>{ if(G.state==='title') playBGM('title.mp3'); },{once:true});
+  // 玩家停在标题页时后台预热：开场动画用图(固定动漫版) + 第一章全部美术——慢网络下首局也不空场
+  setTimeout(()=>{
+    ['issue_voice.png','issue_climate.png','issue_ai.png','street.png','ch 2 debate.png','podium_pov.png']
+      .forEach(f=>{ const im=new Image(); im.src=ART_ANIME+encodeURIComponent(f); });
+    preloadSceneData(DATA['1']);
+  }, 500);
 }
 boot();
 </script>
