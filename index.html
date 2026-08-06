@@ -453,9 +453,21 @@ function resetDialogue(){ D.active=false; D.onClose=null; D.queue=[]; D.idx=0; $
 // ================= NPC sprite =================
 function setNPC(file, clickable){
   const n=$('npc');
+  const seq=(n._seq=(n._seq||0)+1);   // 竞态防护：任何新调用使旧的待完成加载失效
   if(!file){ n.style.opacity=0; n.classList.remove('clickable'); n.onclick=null; n.dataset.file=''; return; }
-  n.dataset.file=file; n.src=img(file); n.style.opacity=1;
-  n.classList.toggle('clickable',!!clickable);
+  n.dataset.file=file; n.classList.toggle('clickable',!!clickable);
+  if(n.src.endsWith(encodeURIComponent(file))){ n.style.opacity=1; return; }
+  // 换新立绘：新图就绪前不上台。若直接改 n.src，浏览器会继续显示旧位图直到新图下载完——
+  // 慢网络下"台上站着上一幕的 NPC"数秒（线上二章战斗实际反馈）。用独立 Image 预载探测，
+  // 不能用 n.complete：改 src 后微任务运行前它仍返回旧图状态的 true。
+  n.style.opacity=0;
+  const show=url=>{ if(n._seq===seq){ n.src=url; n.style.opacity=1; } };
+  const url=img(file), pre=new Image();
+  pre.onload=()=>show(url);
+  pre.onerror=()=>{ const back=ART+encodeURIComponent(file);  // 动漫缺图 → 回退照片版
+    if(url!==back){ const p2=new Image(); p2.onload=()=>show(back); p2.src=back; } };
+  pre.src=url;
+  if(pre.complete && pre.naturalWidth>0) show(url);  // 缓存命中：同步显示，无闪烁
 }
 function setBG(file){ const b=$('bg'); b.dataset.file=file||''; b.src=img(file); }
 function refreshArt(){
@@ -463,6 +475,15 @@ function refreshArt(){
   const n=$('npc'); if(n.dataset.file) n.src=img(n.dataset.file);
 }
 function clearNPC(){ const n=$('npc'); n.style.opacity=0; n.classList.remove('clickable'); n.onclick=null; }
+// 预热本场景全部立绘与背景（含战斗 NPC 的 sprite2 换人图）：
+// 配合 setNPC 的"加载完才显示"，保证任何换图瞬间都有正确立绘可用
+function preloadScene(){
+  const files=new Set(); const add=f=>{ if(f) files.add(f); };
+  add(S.cardBattleBackground); add(S.regularBackground); add(S.investigationDoneBackground);
+  S.backgrounds.forEach(bg=>{ add(bg.sprite); bg.npcs.forEach(n=>{ add(n.sprite); add(n.sprite2); }); });
+  S.cardBattleNpcs.forEach(n=>{ add(n.sprite); add(n.sprite2); });
+  files.forEach(f=>{ const im=new Image(); im.src=img(f); });
+}
 
 // ================= SCENE LOADING =================
 async function loadScene(key, opts={}){
@@ -476,6 +497,7 @@ async function loadScene(key, opts={}){
   S._obtain=(()=>{ const s=new Set(); S.backgrounds.forEach(bg=>bg.npcs.forEach(n=>{
     if(n.cardIdToGet)s.add(n.cardIdToGet); if(n.cardIdToGet2)s.add(n.cardIdToGet2); })); return [...s].sort((a,b)=>a-b); })();
   S.backgrounds.forEach(bg=>bg.npcs.forEach(n=>{ n._done=false; })); // reset for replay
+  preloadScene(); // 提前拉取本章全部立绘/背景，杜绝战斗换人时旧立绘残留
   // intro narrative
   showScreen(null); $('hand').style.transform='translateY(120%)';
   await fade(true);
@@ -980,7 +1002,7 @@ async function boot(){
   // title bg
   $('titleScreen').style.backgroundImage=`url('${img('title.png')}')`;
   showScreen('titleScreen');
-  $('devinfo').textContent='beta v1.3 · collect all the evidence to earn a lottery code 🎟️';
+  $('devinfo').textContent='beta v1.3.1 · collect all the evidence to earn a lottery code 🎟️';
   // title music on first interaction
   document.body.addEventListener('pointerdown',()=>{ if(G.state==='title') playBGM('title.mp3'); },{once:true});
 }
