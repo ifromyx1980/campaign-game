@@ -1,0 +1,1169 @@
+{
+ "1": {
+  "backgrounds": [
+   {
+    "sprite": "street.png",
+    "name": "Street",
+    "npcs": [
+     {
+      "sprite": "police ch1.png",
+      "name": "Police Officer",
+      "sprite2": null,
+      "name2": "",
+      "switchIndex": 0,
+      "dialogueTexts": [
+       "As you can see, each group thinks they know what is best for the town.",
+       "Younger people and shop owners hope the government will provide funding to support local stores.",
+       "And middle-aged workers and laborers want the government to invite large companies into town.",
+       "{s}Which group do you want to speak with first?"
+      ],
+      "cardIdToGet": 0,
+      "cardIdToGet2": 0
+     },
+     {
+      "sprite": "local shop supporter ch1.png",
+      "name": "Local Shop Supporter",
+      "sprite2": null,
+      "name2": "",
+      "switchIndex": 0,
+      "dialogueTexts": [
+       "We don’t trust large companies.",
+       "They might take the money we earn here and never spend it in town.",
+       "Local shop owners are our neighbors. They were born here, live here, and won’t leave after receiving support.",
+       "They’re also more likely to spend what they earn locally.",
+       "They’re also more likely to spend what they earn locally.",
+       "If the town government doesn’t agree, I’ll vote for a Democratic candidate and hope the town follows."
+      ],
+      "cardIdToGet": 6,
+      "cardIdToGet2": 0
+     },
+     {
+      "sprite": "middle age man + company supporter.png",
+      "name": "Large Company Supporter",
+      "sprite2": null,
+      "name2": "",
+      "switchIndex": 0,
+      "dialogueTexts": [
+       "How many people can one small shop hire? Two? Three?",
+       "If a large company opens a branch here, we won’t have to worry about unemployment.",
+       "The last Republican president supported plans like this. Maybe I’ll vote Republican in the next election."
+      ],
+      "cardIdToGet": 1,
+      "cardIdToGet2": 0
+     }
+    ]
+   },
+   {
+    "sprite": "park.png",
+    "name": "Park",
+    "npcs": [
+     {
+      "sprite": "old woman ch1.png",
+      "name": "Old Woman",
+      "sprite2": null,
+      "name2": "",
+      "switchIndex": 0,
+      "dialogueTexts": [
+       "{s}You walk to the edge of town and find a ruined park.  An older resident stands among broken paths.",
+       "I hope they build a new park here.",
+       "Doesn’t the town feel too serious and silent these days?",
+       "Doesn’t the town feel too serious and silent these days?",
+       "Older people like us also need fresh air when we go for walks.",
+       "{s}She sighs and shakes his head.",
+       "“I’ll vote for Democrats. They care about green space and public health.",
+       "To her, this broken park is proof of neglect and unfairness. You note her values about health and shared space."
+      ],
+      "cardIdToGet": 4,
+      "cardIdToGet2": 0
+     },
+     {
+      "sprite": "worker ch1.png",
+      "name": "Worker",
+      "sprite2": null,
+      "name2": "",
+      "switchIndex": 0,
+      "dialogueTexts": [
+       "{s}A worker passes by and shouts back.",
+       "That would be terrible! This land was paid for by our taxes, and I still have to walk miles to work!",
+       "{y}What is going on?",
+       "There aren’t enough roads in this town. That’s why traffic is so bad.",
+       "To get to work on time, we either walk or wake up at dawn.",
+       "I’ll vote Republican in the next election. They won’t waste tax money."
+      ],
+      "cardIdToGet": 3,
+      "cardIdToGet2": 0
+     }
+    ]
+   },
+   {
+    "sprite": "town hall.png",
+    "name": "Town Hall",
+    "npcs": [
+     {
+      "sprite": "lobbyist ch1.png",
+      "name": "Lobbyist",
+      "sprite2": null,
+      "name2": "",
+      "switchIndex": 0,
+      "dialogueTexts": [
+       "{s}A lobbyist leans forward first.",
+       "Opening a private university would bring students and professors to town.",
+       "And it wouldn’t require local tax money.",
+       "Why struggle with running something you’re not familiar with when the market can handle it?",
+       "I’m sure Republicans here would support leaving education to the market."
+      ],
+      "cardIdToGet": 2,
+      "cardIdToGet2": 0
+     },
+     {
+      "sprite": "legister ch1.png",
+      "name": "Legister",
+      "sprite2": null,
+      "name2": "",
+      "switchIndex": 0,
+      "dialogueTexts": [
+       "{s}A legislator exchanged glances before responding to his fellow.",
+       "Your idea makes sense. However…",
+       "The state is considering building a new public university, and our town is one possible location.",
+       "Public universities make higher education more accessible to local students.",
+       "They help keep young people here instead of only coming back for holidays.",
+       "There are disadvantages, but Democrats in this town believe it is worth the cost."
+      ],
+      "cardIdToGet": 5,
+      "cardIdToGet2": 0
+     }
+    ]
+   }
+  ],
+  "cardBattleNpcs": [
+   {
+    "name": "Middle Age Man",
+    "sprite": "middle age man + company supporter.png",
+    "dialogueTexts": [
+     "{s}A middle-aged resident stood up, his voice calm but tired.",
+     "We’ve talked about the economy for years.",
+     "Stores are closing. Jobs are disappearing.",
+     "Are we finally going to act, or just keep talking?",
+     "{s}The room murmurs as they look at you.",
+     "{s}This is no longer about detailed plans; it is about whether anything will happen now, whether you can move them from talk to action."
+    ],
+    "switchIndex": 0,
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0,
+    "name2": "",
+    "sprite2": null,
+    "questionType": 0
+   },
+   {
+    "name": "Local Shop Supporter",
+    "sprite": "local shop supporter ch1.png",
+    "questionType": 1,
+    "dialogueTexts": [
+     "{s}A shop owner raises his hands.",
+     "Big companies promise jobs. But what happens when they leave again?",
+     "We’ve seen this before. Should we take the risk?",
+     "{s}His voice is steady, not angry, but the fear is clear. Around him, others nod.",
+     "{s}This is not about growth; it is about fear of consequences if they choose wrong again.."
+    ],
+    "switchIndex": 0,
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0,
+    "name2": "",
+    "sprite2": null
+   },
+   {
+    "name": "Kid",
+    "sprite": "kid ch1.png",
+    "questionType": 2,
+    "dialogueTexts": [
+     "{s}Children and adults begin arguing at the same time.",
+     "We want a playground!",
+     "Not with our taxes!",
+     "{s}Voices overlap, sharp and confused.",
+     "So tell us—who will you support?",
+     "{s}This round is not asking for a perfect solution; it is testing whether you understand the conflict and what both sides feel is fair."
+    ],
+    "switchIndex": 0,
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0,
+    "name2": "",
+    "sprite2": null
+   },
+   {
+    "name": "Mother",
+    "sprite": "mother ch1.png",
+    "questionType": 1,
+    "dialogueTexts": [
+     "{s}A woman in the back slowly rises to speak.",
+     "My daughter will graduate next year.",
+     "A private university sounds impressive, but we’re afraid of the cost.",
+     "{s}No one interrupts; even the air feels careful.",
+     "{s}This is not a technical policy debate; it is a question about risk, debt, and regret—about what kind of future you are asking her to trust."
+    ],
+    "switchIndex": 0,
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0,
+    "name2": "",
+    "sprite2": null
+   },
+   {
+    "name": "Old Man",
+    "sprite": "man reporter ch2.png",
+    "questionType": 1,
+    "dialogueTexts": [
+     "{s}An older man near the aisle stands, gripping his seat.",
+     "Every option sounds risky. Moving too slowly already hurts us.",
+     "We’ve heard promises before.  So tell me—what’s different this time?",
+     "{s}The room falls silent, waiting.",
+     "{s}This moment is not about statistics or fine print; it is about whether you are willing to act and let them hold you responsible."
+    ],
+    "switchIndex": 0,
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0,
+    "name2": "",
+    "sprite2": null
+   }
+  ],
+  "responses": [
+   "A sigh. No one moves.",
+   "A few nods. Some support is gained.",
+   "People shout. Donations increase."
+  ],
+  "cardBattleBackground": "town hall.png",
+  "regularBackground": "ui.png",
+  "investigationDoneBackground": "fullevidentword.png",
+  "battleBGM": "battle.mp3",
+  "sceneBGM": "1.mp3",
+  "cardData": [
+   {
+    "id": 1,
+    "title": "Why not the more effective way?",
+    "description": "Pushes for efficiency and clear action. Treats faster solutions as better solutions. Values results over hesitation.",
+    "type": 0,
+    "party": 1
+   },
+   {
+    "id": 2,
+    "title": "The market will decide for itself.",
+    "description": "Frames non-intervention as a natural order. Trusts the system to correct itself. Questions the need for government involvement.",
+    "type": 2,
+    "party": 1
+   },
+   {
+    "id": 3,
+    "title": "Holding a choice is better than making a bad one.",
+    "description": "Rejects rushed decisions. Warns against acting without certainty. Frames hesitation as responsibility.",
+    "type": 1,
+    "party": 1
+   },
+   {
+    "id": 4,
+    "title": "Fairness is priceless.",
+    "description": "Places moral value above efficiency. Frames decisions around equality and justice. Questions outcomes that benefit only some.",
+    "type": 2,
+    "party": 0
+   },
+   {
+    "id": 5,
+    "title": "Truth exists on both sides.",
+    "description": "Acknowledges complexity and conflict. Avoids taking extreme positions. Seeks balance over clear victory.",
+    "type": 1,
+    "party": 0
+   },
+   {
+    "id": 6,
+    "title": "Long-standing problems demand immediate solutions.",
+    "description": "Treats delay as part of the problem. Frames long neglect as justification for action. Pushes for decisive change.",
+    "type": 0,
+    "party": 0
+   }
+  ],
+  "level": 0,
+  "pointsToWin": 11,
+  "narrative": {
+   "chapter": "Chapter 1\nThe Neighborhood",
+   "intro": "You have always dreamed of becoming President of the United States.\n\nPeople say it is impossible, but you still believe.\nTo start, you\nturn to your neighbors.\nIn an ordinary American town where both parties\nexist, you walk through the town center, street, and garden.\nYou listen\nto residents argue inside your neighborhood, and from these debates you gain\nsix idea cards.",
+   "win": "This is only a town.\nOnly a beginning.\nBut every campaign starts\nsomewhere.\nNext level.",
+   "lose": "Unfortunately, this run ends here.\n\nBut elections are coming\nagain.",
+   "transit": "The meeting comes to an end.\nNow, it is your turn.\nYou are not\nhere to find the perfect truth.\nThere is no perfect plan.\nBut a good\nplan may be enough to earn support.\nTake a breath.\nBefore you speak,\ndecide who you are speaking to.",
+   "chosen": null,
+   "all": [
+    "The meeting comes to an end.\nNow, it is your turn.\nYou are not\nhere to find the perfect truth.\nThere is no perfect plan.\nBut a good\nplan may be enough to earn support.\nTake a breath.\nBefore you speak,\ndecide who you are speaking to.",
+    "Unfortunately, this run ends here.\n\nBut elections are coming\nagain.",
+    "This is only a town.\nOnly a beginning.\nBut every campaign starts\nsomewhere.\nNext level.",
+    "You have always dreamed of becoming President of the United States.\n\nPeople say it is impossible, but you still believe.\nTo start, you\nturn to your neighbors.\nIn an ordinary American town where both parties\nexist, you walk through the town center, street, and garden.\nYou listen\nto residents argue inside your neighborhood, and from these debates you gain\nsix idea cards."
+   ]
+  }
+ },
+ "2-D": {
+  "backgrounds": [
+   {
+    "sprite": "convention hall dem.png",
+    "name": "Convention Hall",
+    "npcs": [
+     {
+      "sprite": "volunteer ch2.png",
+      "name": "Volunteer",
+      "sprite2": "advisor ch2.png",
+      "name2": "Delegate",
+      "switchIndex": 5,
+      "dialogueTexts": [
+       "{s}You are not on the stage, not yet. For now, you listen.",
+       "{s}A volunteer tells delegates:",
+       "Our candidate has thought this through. Education. The economy. The environment.",
+       "{s}People nod, then someone mutters, “Yes, but timing matters.”",
+       "{y}Timing matters? You mean the plan is fine, just not now?",
+       "{s}A delegate leans over.",
+       "Alex Morgan’s environmental plan adds more regulation.",
+       "Higher standards, slower change at the beginning. He’s thinking about the long run.",
+       "That’s his strength, and maybe his weakness.",
+       "{s}You think about elections, and how long patience usually lasts.",
+       "{y}It’s whether people are ready to start now."
+      ],
+      "cardIdToGet": 3,
+      "cardIdToGet2": 5
+     }
+    ]
+   },
+   {
+    "sprite": "media area.png",
+    "name": "Media Area",
+    "npcs": [
+     {
+      "sprite": "man reporter ch2.png",
+      "name": "Journalist",
+      "sprite2": "woman reporter ch2.png",
+      "name2": "Reporter",
+      "switchIndex": 3,
+      "dialogueTexts": [
+       "{s}Voices overlap; no one waits to finish a sentence.  For now, you listen.",
+       "{s}A journalist scrolls on a tablet.",
+       "Jobs, that’s the first thing people ask about. Not next year. Now.",
+       "{s}Another reporter adds:",
+       "Everyone promises growth, but growth doesn’t feel the same to everyone.",
+       "Alex Morgan wants the government to step in more.",
+       "Public investment, support for workers. Supporters say it builds stable jobs. Critics say it’s slow and expensive.",
+       "If the economy turns before results show, voters won’t wait.",
+       "{s}You picture that gap between promise and paycheck.",
+       "{y}So it works if people can hold on. But what if they can’t?"
+      ],
+      "cardIdToGet": 1,
+      "cardIdToGet2": 6
+     }
+    ]
+   },
+   {
+    "sprite": "delegate lounge.png",
+    "name": "Delegate Lounge",
+    "npcs": [
+     {
+      "sprite": "local delegate ch2.png",
+      "name": "Local Delegate",
+      "sprite2": null,
+      "name2": "",
+      "switchIndex": 0,
+      "dialogueTexts": [
+       "{s}You take a nearby seat. For now, you listen.",
+       "{s}A local delegate tells a small group.",
+       "Education always sounds safe. No one wants to be against it. But it depends on who actually gets access.",
+       "{y}[What do you mean by access?",
+       "Who can afford it. Who gets in. Who has to leave home for a chance.",
+       "Alex Morgan supports more public funding—community colleges, public universities, lower costs for local students.",
+       "But it means higher public spending, and not everyone sees the benefit right away.",
+       "{y}So it’s fairer. But people still ask why they should be the ones paying."
+      ],
+      "cardIdToGet": 2,
+      "cardIdToGet2": 4
+     }
+    ]
+   }
+  ],
+  "cardBattleNpcs": [
+   {
+    "name": "Moderator",
+    "name2": "Alex Morgan",
+    "sprite": "moderator.png",
+    "sprite2": "D opponent.png",
+    "switchIndex": 2,
+    "dialogueTexts": [
+     "First question, a simple one.",
+     "When do the jobs come? Not direction. Now.",
+     "{s}The microphone goes to your opponent.",
+     "We need stable jobs, not short-lived growth. The government must step in when people need support."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0,
+    "questionType": 0
+   },
+   {
+    "name": "Moderator",
+    "name2": "Alex Morgan",
+    "sprite": "moderator.png",
+    "sprite2": "D opponent.png",
+    "switchIndex": 2,
+    "questionType": 1,
+    "dialogueTexts": [
+     "No one opposes protecting the environment.",
+     "The question is—who pays the cost?",
+     "{s}The microphone goes to your opponent.",
+     "If we don’t act now, the cost will only grow. Environmental damage doesn’t disappear.",
+     "{s}You feel hesitation in the room: people weighing risk against pain they already feel.",
+     "{s}This round is about uncertainty and who you are asking to take the hit."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "Moderator",
+    "name2": "Alex Morgan",
+    "sprite": "moderator.png",
+    "sprite2": "D opponent.png",
+    "switchIndex": 2,
+    "questionType": 2,
+    "dialogueTexts": [
+     "Education. Not whether it matters.",
+     "But who can actually use it?",
+     "{s}The microphone goes to your opponent.",
+     "Public education is the foundation of mobility.",
+     "{s}Some delegates think of tuition bills; others think of empty local colleges.",
+     "{s} This round is about fairness—whose door education really opens, and whose stays shut."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "Moderator",
+    "name2": "Alex Morgan",
+    "sprite": "moderator.png",
+    "sprite2": "D opponent.png",
+    "switchIndex": 2,
+    "questionType": 2,
+    "dialogueTexts": [
+     "Assume things go wrong, the economy slows, the budget tightens.",
+     "Who should be protected first?",
+     "{s}The microphone goes to your opponent.",
+     "The government exists to protect the vulnerable.",
+     "{s}Delegates whisper, testing each answer against their own districts.",
+     "{s}This round weighs responsibility—who you will shield and who you will ask to endure more."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "Moderator",
+    "name2": "",
+    "sprite": "moderator.png",
+    "sprite2": "D opponent.png",
+    "switchIndex": 0,
+    "questionType": 0,
+    "dialogueTexts": [
+     "Resources are limited. Time is limited.",
+     "You have four years. What do you do first?",
+     "{s}The opponent does not rush. This round demands a choice."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   }
+  ],
+  "responses": [
+   "A sigh. No one moves.",
+   "A few nods. Some support is gained.",
+   "People shout. Donations increase."
+  ],
+  "cardBattleBackground": "ch 2 debate.png",
+  "regularBackground": "ui.png",
+  "investigationDoneBackground": "fullevidentword.png",
+  "battleBGM": "battle.mp3",
+  "sceneBGM": "2.mp3",
+  "cardData": [
+   {
+    "id": 1,
+    "title": "We need results, not promises.",
+    "description": "Pushes for action now. Accepts imperfect solutions. Treats delay as the problem.",
+    "type": 0,
+    "party": 1
+   },
+   {
+    "id": 2,
+    "title": "The market will adjust if we let it.",
+    "description": "Frames freedom and restraint as the natural order. Warns against over-intervention.",
+    "type": 2,
+    "party": 1
+   },
+   {
+    "id": 3,
+    "title": "Rushing into the wrong answer helps no one.",
+    "description": "Refuses forced decisions. Emphasizes risk and consequences.",
+    "type": 1,
+    "party": 1
+   },
+   {
+    "id": 4,
+    "title": "Fairness is not optional.",
+    "description": "Prioritizes values and responsibility. Reframes who is left out.",
+    "type": 2,
+    "party": 0
+   },
+   {
+    "id": 5,
+    "title": "Both sides pay a price.",
+    "description": "Acknowledges complexity. Rejects perfect answers.",
+    "type": 1,
+    "party": 0
+   },
+   {
+    "id": 6,
+    "title": "Growth means nothing if it leaves scars.",
+    "description": "Rejects short-term gain at long-term cost. Treats restraint as action.",
+    "type": 0,
+    "party": 0
+   }
+  ],
+  "level": 1,
+  "pointsToWin": 12,
+  "narrative": {
+   "chapter": "Chapter 2\n\nInside the Party",
+   "intro": "The lights turn on.\n\nThe stage feels higher than you expected.\n\nYou\nstand on one side.\n\nYour opponent stands on the other.\n\nThe\nmoderator signals the start.",
+   "win": null,
+   "lose": null,
+   "transit": "The room grows quiet as the debate ends.\n\nConversations drift away\nfrom you, toward your opponent.\nScreens and note pads do not move in your\nfavor.\nSupport does not shift; delegates begin to stand, already thinking\nabout the next speaker.\n\nThis path closes—for now.\nYou step off\nthe stage with your cards and your missteps, and the only option left is\nto restart.",
+   "chosen": null,
+   "all": [
+    "Chapter 2\n\nInside the Party",
+    "The lights turn on.\n\nThe stage feels higher than you expected.\n\nYou\nstand on one side.\n\nYour opponent stands on the other.\n\nThe\nmoderator signals the start.",
+    "The room grows quiet as the debate ends.\n\nConversations drift away\nfrom you, toward your opponent.\nScreens and note pads do not move in your\nfavor.\nSupport does not shift; delegates begin to stand, already thinking\nabout the next speaker.\n\nThis path closes—for now.\nYou step off\nthe stage with your cards and your missteps, and the only option left is\nto restart.",
+    "The debate closes, but not everything ends.\n\nSome delegates remain\nseated, talking in low voices.\nOthers come closer, asking questions instead\nof walking away.\n\nSupport does not flood toward you, but it gathers—steadier\nthan applause.\nYou were not perfect, but you understood what they were\nreally asking.\n\nWhen you leave the stage, you are not just a name on the\nprogram.\nYou are someone they will follow.",
+    "This is the primary election.\nNot every voter is here—\nonly\nmembers, delegates, insiders.\nThey are choosing one thing:\nwho will\ncarry their banner forward.\n\nYou argue on a party stage.\nYou use\nyour cards to answer questions about jobs,\nthe environment, education,\nand the cost.\nEvery card you play\ntells your own side\nwhat kind\nof candidate you are."
+   ]
+  }
+ },
+ "2-R": {
+  "backgrounds": [
+   {
+    "sprite": "convention hall dem.png",
+    "name": "Convention Hall",
+    "npcs": [
+     {
+      "sprite": "volunteer ch2.png",
+      "name": "Volunteer",
+      "sprite2": "advisor ch2.png",
+      "name2": "Delegate",
+      "switchIndex": 5,
+      "dialogueTexts": [
+       "{s}You are not on the stage, not yet. For now, you listen.",
+       "{s}A volunteer tells delegates:",
+       "Our candidate has thought this through. Education. The economy. The environment.",
+       "{s}People nod, then someone mutters, “Yes, but timing matters.”",
+       "{y}Timing matters? You mean the plan is fine, just not now?",
+       "{s}Another delegate shakes his head.",
+       "Rebecca Hayes keeps regulation minimal.",
+       "She doesn’t want to slow businesses down. She believes companies will adjust on their own.",
+       "That’s her strength—and maybe her weakness.",
+       "{s}You imagine what happens if adjustment never comes.",
+       "{y}So the question isn’t whether to act. It’s whether the pressure comes too early."
+      ],
+      "cardIdToGet": 3,
+      "cardIdToGet2": 5
+     }
+    ]
+   },
+   {
+    "sprite": "media area.png",
+    "name": "Media Area",
+    "npcs": [
+     {
+      "sprite": "man reporter ch2.png",
+      "name": "Reporter",
+      "sprite2": "man reporter ch2.png",
+      "name2": "Journalist",
+      "switchIndex": 3,
+      "dialogueTexts": [
+       "{s}Voices overlap; no one waits to finish a sentence.  For now, you listen.",
+       "{s}A reporter scrolls on a tablet.",
+       "Everyone promises growth, but growth doesn’t feel the same to everyone.",
+       "{s}Another journalist adds:",
+       "Jobs, that’s the first thing people ask about. Not next year. Now.",
+       "Rebecca Hayes believes jobs come faster through businesses.",
+       "Lower taxes, fewer rules.",
+       "Supporters say it brings work quickly. Critics say companies don’t always share the gains.",
+       "If profits rise but wages don’t, people will notice.",
+       "{s}You imagine that distance widening.",
+       "{y}So speed matters."
+      ],
+      "cardIdToGet": 1,
+      "cardIdToGet2": 6
+     }
+    ]
+   },
+   {
+    "sprite": "delegate lounge.png",
+    "name": "Delegate Lounge",
+    "npcs": [
+     {
+      "sprite": "local delegate ch2.png",
+      "name": "Local Delegate",
+      "sprite2": "legister ch1.png",
+      "name2": "Another Delegate",
+      "switchIndex": 4,
+      "dialogueTexts": [
+       "{s}You take a nearby seat. For now, you listen.",
+       "{s}A local delegate tells a small group.",
+       "Education always sounds safe. No one wants to be against it. But it depends on who actually gets access.",
+       "{y}[What do you mean by access?",
+       "{s}A different delegate folds his arms.",
+       "Rebecca Hayes prefers private and local solutions.",
+       "Private colleges, training tied to businesses. It can move faster and use less public money.",
+       "But access depends on income. Some towns get left behind.",
+       "{s}The group falls quiet for a moment. You follow the tradeoff in your head.",
+       "{y}So it’s efficient. But not everyone gets that chance."
+      ],
+      "cardIdToGet": 2,
+      "cardIdToGet2": 4
+     }
+    ]
+   }
+  ],
+  "cardBattleNpcs": [
+   {
+    "name": "Moderator",
+    "name2": "Rebecca Hayes",
+    "sprite": "moderator.png",
+    "sprite2": "R opponent.png",
+    "switchIndex": 2,
+    "dialogueTexts": [
+     "First question, a simple one.",
+     "When do the jobs come? Not direction. Now.",
+     "{s}The microphone goes to your opponent.",
+     "The economy needs room to move. Businesses create jobs. The longer we wait, the harder it gets."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0,
+    "questionType": 0
+   },
+   {
+    "name": "Moderator",
+    "name2": "Rebecca Hayes",
+    "sprite": "moderator.png",
+    "sprite2": "R opponent.png",
+    "switchIndex": 2,
+    "questionType": 1,
+    "dialogueTexts": [
+     "No one opposes protecting the environment.",
+     "The question is—who pays the cost?",
+     "{s}The microphone goes to your opponent.",
+     "We need to be realistic. Too many rules hurt the economy. Solutions shouldn’t be one-size-fits-all.",
+     "{s}You feel hesitation in the room: people weighing risk against pain they already feel.",
+     "{s}This round is about uncertainty and who you are asking to take the hit."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "Moderator",
+    "name2": "Rebecca Hayes",
+    "sprite": "moderator.png",
+    "sprite2": "R opponent.png",
+    "switchIndex": 2,
+    "questionType": 2,
+    "dialogueTexts": [
+     "Education. Not whether it matters.",
+     "But who can actually use it?",
+     "{s}The microphone goes to your opponent.",
+     "Efficiency creates opportunity.",
+     "{s}Some delegates think of tuition bills; others think of empty local colleges.",
+     "{s}This round is about fairness—whose door education really opens, and whose stays shut."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "Moderator",
+    "name2": "Rebecca Hayes",
+    "sprite": "moderator.png",
+    "sprite2": "R opponent.png",
+    "switchIndex": 2,
+    "questionType": 2,
+    "dialogueTexts": [
+     "Assume things go wrong, the economy slows, the budget tightens.",
+     "Who should be protected first?",
+     "{s}The microphone goes to your opponent.",
+     "Keeping the economy running protects more people.",
+     "{s}Delegates whisper, testing each answer against their own districts.",
+     "{s}This round weighs responsibility—who you will shield and who you will ask to endure more."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "Moderator",
+    "name2": "",
+    "sprite": "moderator.png",
+    "sprite2": "R opponent.png",
+    "switchIndex": 0,
+    "questionType": 0,
+    "dialogueTexts": [
+     "Resources are limited. Time is limited.",
+     "You have four years. What do you do first?",
+     "{s}The opponent does not rush. This round demands a choice."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   }
+  ],
+  "responses": [
+   "A sigh. No one moves.",
+   "A few nods. Some support is gained.",
+   "People shout. Donations increase."
+  ],
+  "cardBattleBackground": "ch 2 debate.png",
+  "regularBackground": "ui.png",
+  "investigationDoneBackground": "fullevidentword.png",
+  "battleBGM": "battle.mp3",
+  "sceneBGM": "2.mp3",
+  "cardData": [
+   {
+    "id": 1,
+    "title": "We need results, not promises.",
+    "description": "Pushes for action now. Accepts imperfect solutions. Treats delay as the problem.",
+    "type": 0,
+    "party": 1
+   },
+   {
+    "id": 2,
+    "title": "The market will adjust if we let it.",
+    "description": "Frames freedom and restraint as the natural order. Warns against over-intervention.",
+    "type": 2,
+    "party": 1
+   },
+   {
+    "id": 3,
+    "title": "Rushing into the wrong answer helps no one.",
+    "description": "Refuses forced decisions. Emphasizes risk and consequences.",
+    "type": 1,
+    "party": 1
+   },
+   {
+    "id": 4,
+    "title": "Fairness is not optional.",
+    "description": "Prioritizes values and responsibility. Reframes who is left out.",
+    "type": 2,
+    "party": 0
+   },
+   {
+    "id": 5,
+    "title": "Both sides pay a price.",
+    "description": "Acknowledges complexity. Rejects perfect answers.",
+    "type": 1,
+    "party": 0
+   },
+   {
+    "id": 6,
+    "title": "Growth means nothing if it leaves scars.",
+    "description": "Rejects short-term gain at long-term cost. Treats restraint as action.",
+    "type": 0,
+    "party": 0
+   }
+  ],
+  "level": 1,
+  "pointsToWin": 12,
+  "narrative": {
+   "chapter": "Chapter 2\n\nInside the Party",
+   "intro": "The lights turn on.\n\nThe stage feels higher than you expected.\n\nYou\nstand on one side.\n\nYour opponent stands on the other.\n\nThe\nmoderator signals the start.",
+   "win": null,
+   "lose": null,
+   "transit": "The room grows quiet as the debate ends.\n\nConversations drift away\nfrom you, toward your opponent.\nScreens and note pads do not move in your\nfavor.\nSupport does not shift; delegates begin to stand, already thinking\nabout the next speaker.\n\nThis path closes—for now.\nYou step off\nthe stage with your cards and your missteps, and the only option left is\nto restart.",
+   "chosen": null,
+   "all": [
+    "Chapter 2\n\nInside the Party",
+    "The lights turn on.\n\nThe stage feels higher than you expected.\n\nYou\nstand on one side.\n\nYour opponent stands on the other.\n\nThe\nmoderator signals the start.",
+    "The room grows quiet as the debate ends.\n\nConversations drift away\nfrom you, toward your opponent.\nScreens and note pads do not move in your\nfavor.\nSupport does not shift; delegates begin to stand, already thinking\nabout the next speaker.\n\nThis path closes—for now.\nYou step off\nthe stage with your cards and your missteps, and the only option left is\nto restart.",
+    "The debate closes, but not everything ends.\n\nSome delegates remain\nseated, talking in low voices.\nOthers come closer, asking questions instead\nof walking away.\n\nSupport does not flood toward you, but it gathers—steadier\nthan applause.\nYou were not perfect, but you understood what they were\nreally asking.\n\nWhen you leave the stage, you are not just a name on the\nprogram.\nYou are someone they will follow.",
+    "This is the primary election.\nNot every voter is here—\nonly\nmembers, delegates, insiders.\nThey are choosing one thing:\nwho will\ncarry their banner forward.\n\nYou argue on a party stage.\nYou use\nyour cards to answer questions about jobs,\nthe environment, education,\nand the cost.\nEvery card you play\ntells your own side\nwhat kind\nof candidate you are."
+   ]
+  }
+ },
+ "3-D": {
+  "backgrounds": [
+   {
+    "sprite": "waiting room.png",
+    "name": "Waiting Room",
+    "npcs": [
+     {
+      "sprite": "bypassor ch3.png",
+      "name": "Secretary",
+      "sprite2": "",
+      "name2": "",
+      "switchIndex": 0,
+      "dialogueTexts": [
+       "{s}Your secretary meets you outside the stage door.",
+       "No more briefings, you’ve heard everything already— polls, interviews, crises, who’s hopeful and who’s tired.",
+       "{s}She lays six cards on the table.",
+       "These are the lines you can use tonight, not every truth, but all the space we have.",
+       "You can’t speak to everyone. Choose what they’ll remember.",
+       "{s}You look down at the cards. Each one is a way to face risk, fairness, or urgency.",
+       "{s}You won’t answer every question smoothly. Silence or vagueness would be worse.",
+       "{s}You take a breath and start arranging the cards. This will be the spine of your speech."
+      ],
+      "cardIdToGet": 1,
+      "cardIdToGet2": 6
+     }
+    ]
+   }
+  ],
+  "cardBattleNpcs": [
+   {
+    "name": "",
+    "name2": "",
+    "sprite": "",
+    "sprite2": "",
+    "switchIndex": 0,
+    "dialogueTexts": [
+     "{s}You can feel expectation—not for details, but for direction.",
+     "{s}People have heard enough discussion, they are not asking about possibilities.",
+     "{s}They want to know: which way will you move first?",
+     "{s}Your opening words decide whether they keep listening.",
+     "{s}Choose a card."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0,
+    "questionType": 0
+   },
+   {
+    "name": "",
+    "name2": "",
+    "sprite": "",
+    "sprite2": "",
+    "switchIndex": 0,
+    "questionType": 2,
+    "dialogueTexts": [
+     "{s}You continue.",
+     "{s}As you speak of change, the air tightens.",
+     "{s}Every national decision creates winners and losses.",
+     "{s}People are not waiting for a plan. They are waiting for a stance:",
+     "{s}When interests collide, who does the government answer to first? This is a declaration of values.",
+     "{s}Choose a card."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "",
+    "name2": "",
+    "sprite": "",
+    "sprite2": "",
+    "switchIndex": 0,
+    "questionType": 1,
+    "dialogueTexts": [
+     "{s}You slow your pace.",
+     "{s}Some decisions, once made, cannot be undone.",
+     "{s}The audience knows this. They want to know:",
+     "{s}When outcomes are unclear, how do you decide whether to move forward?",
+     "{s}This part of the speech reveals how you face risk.",
+     "{s}Choose a card."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "",
+    "name2": "",
+    "sprite": "",
+    "sprite2": "",
+    "switchIndex": 0,
+    "questionType": 2,
+    "dialogueTexts": [
+     "{s}You turn to society.",
+     "{s}Each citizen has a right. None coexist easily.",
+     "{s}You sense division in the room and a shared expectation:",
+     "{s}Will you acknowledge trade-offs, and stand by one set of values?",
+     "{s}This is about position.",
+     "{s}Choose a card."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "",
+    "name2": "",
+    "sprite": "",
+    "sprite2": "",
+    "switchIndex": 0,
+    "questionType": 2,
+    "dialogueTexts": [
+     "{s}Your speech nears its end.",
+     "{s}Time for your last call.",
+     "{s}Four years.",
+     "{s}You cannot promise everything. You cannot avoid the question:",
+     "{s}If you must act on one category first,  Where will the nation’s strength go?",
+     "{s}This is the final judgment, the one that matters most.",
+     "{s}Choose a card."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   }
+  ],
+  "responses": [
+   "A sigh. No one moves.",
+   "A few nods. Some support is gained.",
+   "People shout. Donations increase."
+  ],
+  "cardBattleBackground": "final speech.png",
+  "regularBackground": "ui.png",
+  "investigationDoneBackground": "fullevidentword.png",
+  "battleBGM": "battle.mp3",
+  "sceneBGM": "3.mp3",
+  "cardData": [
+   {
+    "id": 1,
+    "title": "The Duty to Protect",
+    "description": "Treats government action as responsibility, not an option.",
+    "type": 0,
+    "party": 0
+   },
+   {
+    "id": 2,
+    "title": "Who We Leave Behind",
+    "description": "Centers decisions on those most at risk of exclusion.",
+    "type": 2,
+    "party": 0
+   },
+   {
+    "id": 3,
+    "title": "Care Over Cure",
+    "description": "Warns against quick fixes that create new harm.",
+    "type": 1,
+    "party": 0
+   },
+   {
+    "id": 4,
+    "title": "Silence Is a Choice",
+    "description": "Names inaction as a decision with real consequences.",
+    "type": 0,
+    "party": 0
+   },
+   {
+    "id": 5,
+    "title": "Beyond the Moment",
+    "description": "Shifts focus from short-term pressure to long-term impact.",
+    "type": 1,
+    "party": 0
+   },
+   {
+    "id": 6,
+    "title": "Lines We Won’t Cross",
+    "description": "Sets non-negotiable rights and protections as off-limits to trade.",
+    "type": 2,
+    "party": 0
+   }
+  ],
+  "level": 2,
+  "pointsToWin": 14,
+  "narrative": {
+   "chapter": "Chapter 3\n\nNational Speech",
+   "intro": "The lights turn on.\n\nYou know every sentence will be interpreted.\n\nEvery\npause will be examined.\n\nThe nation is watching,\n\nwaiting\nfor you to speak.",
+   "win": "People stand for you.\n\nSome applaud,\nothers nod in silence.\n\n“They\nlistened.”\n“They understood.”\n\nYou stand at the front.\n\nThe flag of the nation is now behind you.\n\nCameras flash.\n\nElected.",
+   "lose": null,
+   "transit": "The audience begins to disperse.\nConversation overtakes applause.\n\nYou\nremain on the stage.\n\n“They heard you.”\n“But they chose\nsomeone else.”\n\nNot this time.",
+   "chosen": null,
+   "all": [
+    "Chapter 3\n\nNational Speech",
+    "The lights turn on.\n\nYou know every sentence will be interpreted.\n\nEvery\npause will be examined.\n\nThe nation is watching,\n\nwaiting\nfor you to speak.",
+    "The audience begins to disperse.\nConversation overtakes applause.\n\nYou\nremain on the stage.\n\n“They heard you.”\n“But they chose\nsomeone else.”\n\nNot this time.",
+    "People stand for you.\n\nSome applaud,\nothers nod in silence.\n\n“They\nlistened.”\n“They understood.”\n\nYou stand at the front.\n\nThe flag of the nation is now behind you.\n\nCameras flash.\n\nElected.",
+    "Now is the general election.\n\nThe country is watching.\n\nPeople\ndo not want every detail.\n\nThey want to know your direction, your\npriorities, your limits.\n\nIn this chapter,\n\nYou bring six\ncards to the national stage.\n\nThey are the edges of your speech.\n\nEach\nchoice shows\n\nwho you protect,\n\nwhat risks you accept,\n\nand\nwhere the nation will move first."
+   ]
+  }
+ },
+ "3-R": {
+  "backgrounds": [
+   {
+    "sprite": "waiting room.png",
+    "name": "Waiting Room",
+    "npcs": [
+     {
+      "sprite": "bypassor ch3.png",
+      "name": "Secretary",
+      "sprite2": "",
+      "name2": "",
+      "switchIndex": 0,
+      "dialogueTexts": [
+       "{s}Your secretary meets you outside the stage door.",
+       "No more briefings, you’ve heard everything already— polls, interviews, crises, who’s hopeful and who’s tired.",
+       "{s}She lays six cards on the table.",
+       "These are the lines you can use tonight, not every truth, but all the space we have.",
+       "You can’t speak to everyone. Choose what they’ll remember.",
+       "{s}You look down at the cards. Each one is a way to face risk, fairness, or urgency.",
+       "{s}You won’t answer every question smoothly. Silence or vagueness would be worse.",
+       "{s}You take a breath and start arranging the cards. This will be the spine of your speech."
+      ],
+      "cardIdToGet": 1,
+      "cardIdToGet2": 6
+     }
+    ]
+   }
+  ],
+  "cardBattleNpcs": [
+   {
+    "name": "",
+    "name2": "",
+    "sprite": "",
+    "sprite2": "",
+    "switchIndex": 0,
+    "dialogueTexts": [
+     "{s}You can feel expectation—not for details, but for direction.",
+     "{s}People have heard enough discussion, they are not asking about possibilities.",
+     "{s}They want to know: which way will you move first?",
+     "{s}Your opening words decide whether they keep listening.",
+     "{s}Choose a card."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0,
+    "questionType": 0
+   },
+   {
+    "name": "",
+    "name2": "",
+    "sprite": "",
+    "sprite2": "",
+    "switchIndex": 0,
+    "questionType": 2,
+    "dialogueTexts": [
+     "{s}You continue.",
+     "{s}As you speak of change, the air tightens.",
+     "{s}Every national decision creates winners and losses.",
+     "{s}People are not waiting for a plan. They are waiting for a stance:",
+     "{s}When interests collide, who does the government answer to first? This is a declaration of values.",
+     "{s}Choose a card."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "",
+    "name2": "",
+    "sprite": "",
+    "sprite2": "",
+    "switchIndex": 0,
+    "questionType": 1,
+    "dialogueTexts": [
+     "{s}You slow your pace.",
+     "{s}Some decisions, once made, cannot be undone.",
+     "{s}The audience knows this. They want to know:",
+     "{s}When outcomes are unclear, how do you decide whether to move forward?",
+     "{s}This part of the speech reveals how you face risk.",
+     "{s}Choose a card."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "",
+    "name2": "",
+    "sprite": "",
+    "sprite2": "",
+    "switchIndex": 0,
+    "questionType": 2,
+    "dialogueTexts": [
+     "{s}You turn to society.",
+     "{s}Each citizen has a right. None coexist easily.",
+     "{s}You sense division in the room and a shared expectation:",
+     "{s}Will you acknowledge trade-offs, and stand by one set of values?",
+     "{s}This is about position.",
+     "{s}Choose a card."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   },
+   {
+    "name": "",
+    "name2": "",
+    "sprite": "",
+    "sprite2": "",
+    "switchIndex": 0,
+    "questionType": 2,
+    "dialogueTexts": [
+     "{s}Your speech nears its end.",
+     "{s}Time for your last call.",
+     "{s}Four years.",
+     "{s}You cannot promise everything. You cannot avoid the question:",
+     "{s}If you must act on one category first,  Where will the nation’s strength go?",
+     "{s}This is the final judgment, the one that matters most.",
+     "{s}Choose a card."
+    ],
+    "cardIdToGet": 0,
+    "cardIdToGet2": 0
+   }
+  ],
+  "responses": [
+   "A sigh. No one moves.",
+   "A few nods. Some support is gained.",
+   "People shout. Donations increase."
+  ],
+  "cardBattleBackground": "final speech.png",
+  "regularBackground": "ui.png",
+  "investigationDoneBackground": "fullevidentword.png",
+  "battleBGM": "battle.mp3",
+  "sceneBGM": "3.mp3",
+  "cardData": [
+   {
+    "id": 1,
+    "title": "A Direction Chosen",
+    "description": "Offers a fast, firm decision when others hesitate.",
+    "type": 0,
+    "party": 1
+   },
+   {
+    "id": 2,
+    "title": "Freedom to Adapt",
+    "description": "Defends flexibility and restraint as core political values.",
+    "type": 2,
+    "party": 1
+   },
+   {
+    "id": 3,
+    "title": "Knowing the Limits",
+    "description": "Admits constraints and rejects promises you cannot keep.",
+    "type": 1,
+    "party": 1
+   },
+   {
+    "id": 4,
+    "title": "The Right Scale",
+    "description": "Argues for measured, proportional action instead of sweeping change.",
+    "type": 2,
+    "party": 1
+   },
+   {
+    "id": 5,
+    "title": "Earned Trust",
+    "description": "Says trust must be built slowly through consistent behavior.",
+    "type": 1,
+    "party": 1
+   },
+   {
+    "id": 6,
+    "title": "Act Within Our Means",
+    "description": "Commits to quick action that stays realistic and deliverable.",
+    "type": 0,
+    "party": 1
+   }
+  ],
+  "level": 2,
+  "pointsToWin": 14,
+  "narrative": {
+   "chapter": "Chapter 3\n\nNational Speech",
+   "intro": "The lights turn on.\n\nYou know every sentence will be interpreted.\n\nEvery\npause will be examined.\n\nThe nation is watching,\n\nwaiting\nfor you to speak.",
+   "win": "People stand for you.\n\nSome applaud,\nothers nod in silence.\n\n“They\nlistened.”\n“They understood.”\n\nYou stand at the front.\n\nThe flag of the nation is now behind you.\n\nCameras flash.\n\nElected.",
+   "lose": null,
+   "transit": "The audience begins to disperse.\nConversation overtakes applause.\n\nYou\nremain on the stage.\n\n“They heard you.”\n“But they chose\nsomeone else.”\n\nNot this time.",
+   "chosen": null,
+   "all": [
+    "Chapter 3\n\nNational Speech",
+    "The lights turn on.\n\nYou know every sentence will be interpreted.\n\nEvery\npause will be examined.\n\nThe nation is watching,\n\nwaiting\nfor you to speak.",
+    "The audience begins to disperse.\nConversation overtakes applause.\n\nYou\nremain on the stage.\n\n“They heard you.”\n“But they chose\nsomeone else.”\n\nNot this time.",
+    "People stand for you.\n\nSome applaud,\nothers nod in silence.\n\n“They\nlistened.”\n“They understood.”\n\nYou stand at the front.\n\nThe flag of the nation is now behind you.\n\nCameras flash.\n\nElected.",
+    "Now is the general election.\n\nThe country is watching.\n\nPeople\ndo not want every detail.\n\nThey want to know your direction, your\npriorities, your limits.\n\nIn this chapter,\n\nYou bring six\ncards to the national stage.\n\nThey are the edges of your speech.\n\nEach\nchoice shows\n\nwho you protect,\n\nwhat risks you accept,\n\nand\nwhere the nation will move first."
+   ]
+  }
+ }
+}

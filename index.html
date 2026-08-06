@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Campaign — Web Build</title>
+<style>
+  :root{ --stageW:1600; --stageH:900; }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; background:#0a0a0c; color:#eee;
+    font-family:"Georgia","Times New Roman",serif; overflow:hidden;}
+  #wrap{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;}
+  #stage{position:relative; width:1600px; height:900px; transform-origin:center center;
+    background:#000; overflow:hidden; box-shadow:0 0 60px rgba(0,0,0,.8);}
+  .layer{position:absolute; inset:0;}
+  #bg{width:100%; height:100%; object-fit:cover; display:block;}
+  /* NPC sprite */
+  #npc{position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+    height:88%; pointer-events:auto; cursor:pointer; filter:drop-shadow(0 0 18px rgba(0,0,0,.5));
+    transition:opacity .25s;}
+  #npc.clickable:hover{filter:drop-shadow(0 0 26px rgba(255,225,150,.55));}
+  /* location bar + arrows */
+  #topbar{position:absolute; top:0; left:0; right:0; height:84px; display:flex;
+    align-items:center; justify-content:space-between; padding:0 24px;
+    background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,0)); z-index:20;}
+  #loc{font-size:34px; letter-spacing:1px; text-shadow:0 2px 8px #000;}
+  .arrow{background:rgba(20,20,28,.7); border:1px solid rgba(255,255,255,.25);
+    color:#fff; font-size:20px; padding:10px 18px; border-radius:10px; cursor:pointer;
+    backdrop-filter:blur(4px); transition:.15s; min-width:170px;}
+  .arrow:hover{background:rgba(70,70,95,.85);}
+  .arrowrow{position:absolute; top:96px; left:0; right:0; display:flex;
+    justify-content:space-between; padding:0 24px; z-index:20;}
+  /* dialogue */
+  #dlg{position:absolute; left:0; right:0; bottom:0; z-index:40; cursor:pointer;
+    padding:0 0 26px 0; display:none;}
+  #dlgInner{margin:0 60px; background:linear-gradient(180deg,rgba(12,14,22,.92),rgba(8,9,14,.96));
+    border:1px solid rgba(255,255,255,.18); border-radius:16px; padding:26px 34px 30px;
+    min-height:190px; box-shadow:0 -6px 40px rgba(0,0,0,.6);}
+  #name{display:inline-block; font-size:26px; font-weight:bold; color:#ffd36e;
+    background:rgba(0,0,0,.5); padding:4px 18px; border-radius:8px;
+    transform:translateY(-46px); margin-bottom:-30px; border:1px solid rgba(255,210,110,.4);}
+  #dtext{font-size:30px; line-height:1.5; color:#f3f0e8;}
+  #hint{position:absolute; right:90px; bottom:36px; font-size:18px; color:#bbb; animation:blink 1.2s infinite;}
+  @keyframes blink{50%{opacity:.25;}}
+  /* cards hand */
+  #hand{position:absolute; left:0; right:0; bottom:0; z-index:30; display:flex;
+    justify-content:center; gap:14px; padding:18px; transition:transform .35s; pointer-events:none;}
+  .card{width:200px; height:280px; background:linear-gradient(160deg,#2a2540,#15131f);
+    border:2px solid #c9a85a; border-radius:14px; padding:14px; cursor:pointer;
+    display:flex; flex-direction:column; transition:transform .18s, box-shadow .18s;
+    pointer-events:auto; box-shadow:0 6px 18px rgba(0,0,0,.5); position:relative;}
+  .card .ct{font-size:18px; font-weight:bold; line-height:1.2; color:#ffe9b0; min-height:66px;}
+  .card .cd{font-size:14px; line-height:1.32; color:#d8d2c4; margin-top:8px; flex:1; overflow:hidden;}
+  .card.usable:hover{transform:translateY(-26px) scale(1.05); box-shadow:0 14px 30px rgba(255,210,110,.4);}
+  .card.locked{opacity:.32; filter:grayscale(.7);}
+  /* overlay screens */
+  .screen{position:absolute; inset:0; z-index:60; display:none; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; padding:8%;}
+  .screen.show{display:flex;}
+  #titleScreen{background-size:cover; background-position:center;}
+  .bigtitle{font-size:64px; letter-spacing:2px; text-shadow:0 4px 24px #000; margin-bottom:40px; white-space:pre-line; line-height:1.25;}
+  .narr{font-size:34px; line-height:1.55; white-space:pre-line; max-width:1200px;
+    text-shadow:0 3px 14px #000; color:#f3eee2;}
+  .veil{position:absolute; inset:0; background:rgba(4,5,9,.72); z-index:-1;}
+  .btn{font-family:inherit; font-size:30px; color:#fff; cursor:pointer; margin-top:26px;
+    background:linear-gradient(180deg,#3a3450,#1e1a2c); border:2px solid #c9a85a;
+    padding:14px 56px; border-radius:12px; transition:.15s; min-width:280px;}
+  .btn:hover{background:linear-gradient(180deg,#56507a,#2a2440); transform:translateY(-2px);}
+  .btnrow{display:flex; gap:30px; flex-wrap:wrap; justify-content:center; margin-top:34px;}
+  /* fade */
+  #fade{position:absolute; inset:0; background:#000; z-index:80; opacity:0; pointer-events:none; transition:opacity .6s;}
+  #fade.on{opacity:1;}
+  /* HUD (faithful: off by default). toggle with key) */
+  #hud{position:absolute; top:96px; right:24px; z-index:25; background:rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.2); border-radius:10px; padding:10px 16px; font-size:20px; display:none;}
+  #toast{position:absolute; top:120px; left:50%; transform:translateX(-50%); z-index:70;
+    background:rgba(0,0,0,.8); border:1px solid #c9a85a; padding:12px 26px; border-radius:30px;
+    font-size:22px; opacity:0; transition:opacity .3s; pointer-events:none;}
+  #toast.show{opacity:1;}
+  /* card detail */
+  #detail{position:absolute; inset:0; z-index:55; display:none; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.7);}
+  #detail .card{width:300px; height:420px; cursor:default;}
+  #detail .card .ct{font-size:24px;min-height:auto;} #detail .card .cd{font-size:18px;}
+  #closeHint{position:absolute; bottom:60px; left:0; right:0; text-align:center; color:#ccc; font-size:20px;}
+  /* ---- reward / lottery overlay ---- */
+  #rewardScreen .veil{background:radial-gradient(circle at 50% 35%,rgba(40,32,12,.92),rgba(3,4,8,.98));}
+  .rwpane{display:none; flex-direction:column; align-items:center; text-align:center; gap:6px;
+    max-width:1040px; width:92%;}
+  .rwpane.show{display:flex;}
+  .rwburst{font-size:80px; line-height:1; margin-bottom:6px; animation:rwpop .6s ease;}
+  @keyframes rwpop{0%{transform:scale(0) rotate(-25deg); opacity:0;}60%{transform:scale(1.25) rotate(8deg);}100%{transform:scale(1) rotate(0);}}
+  #rwTitle{color:#ffd36e; text-shadow:0 4px 22px #000; margin-bottom:6px;}
+  .rwskip{background:none; border:none; color:#9aa0b0; font-family:inherit; font-size:19px;
+    cursor:pointer; margin-top:14px; text-decoration:underline; opacity:.85;}
+  .rwskip:hover{color:#cfd3e0;}
+  #rwStars{display:flex; gap:10px; margin:14px 0 6px;}
+  #rwStars .st{font-size:54px; cursor:pointer; color:#5a5440; transition:.12s; line-height:1; user-select:none;}
+  #rwStars .st.on{color:#ffd36e; text-shadow:0 0 18px rgba(255,210,110,.7); transform:scale(1.08);}
+  #rwStars .st:hover{transform:scale(1.18);}
+  #rwTags{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:8px 0; max-width:720px;}
+  .rwtag{font-family:inherit; font-size:18px; color:#e8e2d4; cursor:pointer;
+    background:rgba(30,28,42,.85); border:1.5px solid #6a6a8a; border-radius:24px; padding:9px 18px; transition:.13s;}
+  .rwtag.on{border-color:#ffd36e; color:#ffe9b0; background:rgba(70,58,28,.7);}
+  #rwText{font-family:inherit; font-size:19px; color:#f3f0e8; background:rgba(0,0,0,.45);
+    border:1px solid rgba(255,255,255,.2); border-radius:12px; padding:12px 16px; width:80%; max-width:680px;
+    height:64px; resize:none; outline:none; margin:10px 0 4px;}
+  #rwText:focus{border-color:#c9a85a;}
+  #rwCodeBox{font-family:"Courier New",monospace; font-size:40px; font-weight:bold; letter-spacing:3px;
+    color:#fff; background:linear-gradient(180deg,rgba(34,30,52,.95),rgba(18,16,28,.97));
+    border:2px dashed #ffd36e; border-radius:16px; padding:20px 30px; margin:16px 0; user-select:all;
+    box-shadow:0 0 30px rgba(255,210,110,.25); word-break:break-all;}
+  .btn.rwcopy{font-size:22px; min-width:auto; padding:11px 30px; margin-top:0;}
+  #rwHowto{color:#d8d2c4; margin-top:16px; line-height:1.55;}
+  /* ---- investigation: evidence progress + location guidance ---- */
+  #invbar{position:absolute; top:18px; left:50%; transform:translateX(-50%); z-index:26;
+    display:none; align-items:center; gap:13px;
+    background:linear-gradient(180deg,rgba(22,20,32,.92),rgba(12,11,18,.95));
+    border:1px solid rgba(255,210,110,.4); border-radius:30px; padding:9px 22px;
+    box-shadow:0 6px 24px rgba(0,0,0,.5);}
+  #invbar.show{display:flex;}
+  #invbar .ilbl{font-size:19px; color:#ece6d8;}
+  #invbar .ilbl b{color:#ffd36e;}
+  #invpips{display:flex; gap:8px;}
+  #invpips i{width:15px; height:15px; border-radius:50%; border:2px solid #c9a85a;
+    background:transparent; transition:.25s; display:block;}
+  #invpips i.on{background:#ffd36e; box-shadow:0 0 9px rgba(255,210,110,.75); transform:scale(1.08);}
+  .locmark{font-size:.55em; opacity:.9; margin-left:8px; vertical-align:4px; color:#ffd36e;}
+  .locmark.done{color:#7CFC9A;}
+  /* ---- battle: question banner / round result / momentum meter ---- */
+  #qbanner{position:absolute; top:92px; left:50%; transform:translateX(-50%) translateY(-14px);
+    z-index:35; width:min(1040px,92%); text-align:center; opacity:0; transition:opacity .3s, transform .3s;
+    background:linear-gradient(180deg,rgba(22,20,32,.95),rgba(12,11,18,.97));
+    border:1px solid rgba(255,210,110,.45); border-radius:16px; padding:14px 28px;
+    box-shadow:0 8px 34px rgba(0,0,0,.6); pointer-events:none;}
+  #qbanner.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  #qbanner .qh{font-size:23px; color:#f3edd9; line-height:1.5;}
+  #rresult{position:absolute; top:40%; left:50%; transform:translate(-50%,-50%) scale(.82);
+    z-index:72; text-align:center; opacity:0; transition:opacity .25s, transform .25s; pointer-events:none;}
+  #rresult.show{opacity:1; transform:translate(-50%,-50%) scale(1);}
+  #rresult .pts{font-size:72px; font-weight:bold; text-shadow:0 4px 22px #000; line-height:1;}
+  #rresult .lbl{font-size:28px; margin-top:8px; text-shadow:0 2px 10px #000;}
+  #rresult .bonus{font-size:21px; color:#9db8ff; margin-top:6px; text-shadow:0 2px 10px #000;}
+  #mbar{position:absolute; top:20px; left:50%; transform:translateX(-50%); z-index:26;
+    width:560px; display:none;}
+  #mbar.show{display:block;}
+  #mbarTrack{position:relative; height:16px; background:rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.28); border-radius:10px; overflow:hidden;}
+  #mbarFill{height:100%; width:0%; border-radius:10px;
+    background:linear-gradient(90deg,#9b7d36,#ffd36e); transition:width .55s ease;}
+  #mbarGoal{position:absolute; top:-4px; bottom:-4px; width:3px; background:#fff; opacity:.85;
+    box-shadow:0 0 6px rgba(255,255,255,.7);}
+  #mbarLabel{margin-top:7px; text-align:center; font-size:18px; color:#ece6d8; text-shadow:0 2px 6px #000;}
+  #mbarLabel b{color:#ffd36e;}
+  /* 手机竖屏：游戏是 16:9 横版，竖屏缩得太小没法玩——盖一层提示请玩家横屏 */
+  #rotateHint{position:fixed; inset:0; z-index:500; display:none; flex-direction:column;
+    align-items:center; justify-content:center; gap:18px; background:#0a0a0c;
+    color:#f0ead8; text-align:center; padding:10%;}
+  #rotateHint .ric{font-size:72px; animation:rotwob 1.6s ease-in-out infinite;}
+  @keyframes rotwob{0%,100%{transform:rotate(0deg);}50%{transform:rotate(-90deg);}}
+  #rotateHint .rtx{font-size:22px; line-height:1.6;}
+  @media (orientation:portrait) and (max-width:700px){ #rotateHint{display:flex;} }
+  #devbar{position:fixed; bottom:8px; left:8px; z-index:200; font-family:monospace; font-size:12px; color:#888;}
+  #devbar button{font-size:12px; margin-left:6px; background:#222; color:#bbb; border:1px solid #444; border-radius:5px; cursor:pointer; padding:2px 8px;}
+  /* ---- new opening: cold open + motivation ---- */
+  #coldOpen{position:absolute; inset:0; z-index:62; display:none; flex-direction:column;
+    align-items:center; justify-content:center; background:#000; padding:7%; cursor:pointer;}
+  #coldOpen.show{display:flex;}
+  #coldLines{display:flex; flex-direction:column; gap:24px; align-items:center; text-align:center;}
+  .coldline{font-size:42px; line-height:1.35; color:#f3eee2; opacity:0; transform:translateY(10px);
+    transition:opacity 1s ease, transform 1s ease; text-shadow:0 3px 20px #000; max-width:1150px;}
+  .coldline.in{opacity:1; transform:none;}
+  .coldline.big{font-size:60px; letter-spacing:1px; font-weight:bold;}
+  #coldHint{position:absolute; bottom:7%; color:#888; font-size:20px; display:none; animation:blink 1.2s infinite;}
+  #cineWrap{position:absolute; inset:0; z-index:64; display:none; background:#000;}
+  #cineWrap.show{display:block;}
+  #cineFrame{width:100%; height:100%; border:0; display:block; pointer-events:none;}
+  #cineSkip{position:absolute; right:26px; bottom:22px; color:#ccc; font-size:20px;
+    background:rgba(0,0,0,.4); padding:6px 16px; border-radius:8px; z-index:2; pointer-events:none;}
+  #cineWrap.show{cursor:pointer;}
+  #motivePrompt{font-size:31px; line-height:1.5; max-width:1100px; margin-bottom:34px; color:#f3eee2; text-shadow:0 3px 14px #000;}
+  .motbtn{font-family:inherit; font-size:27px; color:#f3eee2; cursor:pointer; margin:12px auto; display:block;
+    background:linear-gradient(180deg,rgba(40,40,64,.92),rgba(20,18,34,.95)); border:2px solid #6a6a8a;
+    padding:18px 34px; border-radius:14px; max-width:960px; width:92%; text-align:left; transition:.15s; line-height:1.3;}
+  .motbtn:hover{border-color:#c9a85a; transform:translateX(8px); background:linear-gradient(180deg,rgba(62,58,94,.96),rgba(34,30,52,.97));}
+  .motbtn small{display:block; font-size:15px; color:#9aa3c0; margin-top:6px; letter-spacing:1.5px; text-transform:uppercase;}
+  #sloganInput{font-family:inherit; font-size:30px; text-align:center; color:#fff; background:rgba(0,0,0,.5);
+    border:none; border-bottom:2px solid #c9a85a; padding:12px 20px; width:70%; outline:none; margin:24px 0;}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage">
+  <img id="bg" class="layer" alt="">
+  <img id="npc" alt="">
+  <div id="topbar"><div id="loc"></div><div id="hud"></div></div>
+  <div class="arrowrow">
+    <button class="arrow" id="prevBtn">◀</button>
+    <button class="arrow" id="nextBtn">▶</button>
+  </div>
+  <div id="invbar"><span class="ilbl">Evidence <b><span id="invnum">0/6</span></b></span><div id="invpips"></div></div>
+  <div id="mbar"><div id="mbarTrack"><div id="mbarFill"></div><div id="mbarGoal"></div></div><div id="mbarLabel"></div></div>
+  <div id="qbanner"></div>
+  <div id="rresult"></div>
+  <div id="hand"></div>
+  <div id="dlg"><div id="dlgInner"><span id="name"></span><div id="dtext"></div></div><div id="hint">▼ click</div></div>
+
+  <div id="detail"><div class="card" id="detailCard"></div><div id="closeHint">click anywhere to close</div></div>
+
+  <div class="screen" id="titleScreen">
+    <div class="btnrow" style="position:absolute;bottom:13%">
+      <button class="btn" id="startBtn">Start Game</button>
+    </div>
+  </div>
+
+  <div class="screen" id="narrScreen"><div class="veil"></div>
+    <div class="bigtitle" id="narrTitle" style="display:none"></div>
+    <div class="narr" id="narrText"></div>
+    <div id="narrHint" style="margin-top:40px;color:#bbb;font-size:22px" class="">▼ click to continue</div>
+  </div>
+
+  <div class="screen" id="partyScreen"><div class="veil"></div>
+    <div class="bigtitle" style="font-size:48px">Choose Your Party</div>
+    <div class="btnrow">
+      <button class="btn dem-btn" id="demBtn" style="border-color:#5b8cff">Democrats</button>
+      <button class="btn rep-btn" id="repBtn" style="border-color:#ff6b6b">Republicans</button>
+    </div>
+  </div>
+
+  <div class="screen" id="endScreen"><div class="veil"></div>
+    <div class="narr" id="endText"></div>
+    <div class="btnrow"><button class="btn" id="endBtn">Continue</button></div>
+  </div>
+
+  <div id="coldOpen"><div id="coldLines"></div><div id="coldHint">▼ click</div></div>
+
+  <div id="cineWrap"><iframe id="cineFrame" title="intro"></iframe><div id="cineSkip">▼ skip</div></div>
+
+  <div class="screen" id="motiveScreen"><div class="veil"></div>
+    <div id="motivePrompt"></div>
+    <div id="motiveOpts"></div>
+  </div>
+
+  <div class="screen" id="sloganScreen"><div class="veil"></div>
+    <div class="bigtitle" style="font-size:34px">Your campaign slogan</div>
+    <input id="sloganInput" maxlength="42" />
+    <div class="btnrow"><button class="btn" id="sloganGo">Start the Campaign ▶</button></div>
+  </div>
+
+  <div class="screen" id="rewardScreen"><div class="veil"></div>
+    <div class="rwpane" id="rwCelebrate">
+      <div class="rwburst">🎉</div>
+      <div class="bigtitle" id="rwTitle" style="font-size:42px">Evidence Complete!</div>
+      <div class="narr" id="rwSub" style="font-size:25px;max-width:920px"></div>
+      <div class="btnrow"><button class="btn" id="rwRateBtn">Rate the Game · Claim Your Code 🎟️</button></div>
+      <button class="rwskip" id="rwSkip1">Maybe later — keep playing ▶</button>
+    </div>
+    <div class="rwpane" id="rwRate">
+      <div class="bigtitle" style="font-size:32px">Rate this game</div>
+      <div id="rwStars"></div>
+      <div id="rwTags"></div>
+      <textarea id="rwText" maxlength="200" placeholder="Anything you'd like to say? (optional)"></textarea>
+      <div class="btnrow"><button class="btn" id="rwSubmit">Submit · Get My Code 🎟️</button></div>
+      <button class="rwskip" id="rwSkip2">Skip ▶</button>
+    </div>
+    <div class="rwpane" id="rwCode">
+      <div class="bigtitle" style="font-size:30px">🎟️ Your One-Time Lottery Code</div>
+      <div id="rwCodeBox"></div>
+      <button class="btn rwcopy" id="rwCopy">📋 Copy Code</button>
+      <div class="narr" id="rwHowto" style="font-size:20px;max-width:940px"></div>
+      <div class="btnrow">
+        <button class="btn" id="rwGoForm" style="display:none">Enter the Draw ↗</button>
+        <button class="btn" id="rwDone">Continue ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <div id="fade"></div>
+</div></div>
+
+<div id="rotateHint"><div class="ric">📱</div>
+  <div class="rtx">Please rotate your phone to landscape<br>请把手机横过来玩，体验更佳 🔄</div></div>
+
+<div id="devbar">
+  <span id="devinfo"></span>
+  <button id="artToggle">art: ANIME</button>
+  <button id="openToggle">opening: CINE</button>
+  <button id="toTitleBtn">↺ title</button>
+  <button id="hudToggle" style="display:none">toggle score HUD</button>
+  <button id="skipBtn" style="display:none">skip to battle</button>
+</div>
+
+<script>
+const TYPE_NAMES=["Immediate Answer","Reflective Delay","Moral Frame"];
+const QTYPE_NAMES=["Urgency","Uncertainty","Justice"];
+const PARTY_NAMES=["Democrats","Republicans"];
+// 提问只给人群情绪暗示，不显示类型名（对角匹配规则仍生效：Urgency→果断、Uncertainty→审慎、Justice→原则）
+const QTYPE_META=[
+  {mood:'The crowd is restless and impatient.',  wants:'They want a decisive answer — now.'},
+  {mood:'The room is unsure and divided.',       wants:'They want someone who has clearly thought it through.'},
+  {mood:'This one cuts to right and wrong.',     wants:'They want a principled stand.'},
+];
+
+// ================= 抽奖 / 奖励配置（主办方按需修改） =================
+// 工作流：玩家集齐线索(里程碑) → 评价游戏 → 生成「一次性抽奖码」→ 拿码去游戏外的登记表参与抽奖。
+// 注意：这是纯前端网页，分数可被改、码算法在源码里——签名只挡“随手乱填/手抖打错”，挡不住会扒源码的人。
+// 真正的公平性请在「外部登记表」按 姓名/学号 去重（每人仅一次有效），并用 抽奖核验.html 核验每个码。
+const LOTTERY = {
+  enabled: true,
+  // ★ apiBase：抽奖后端地址（lottery-server）。填了就走「服务器真发真核销」(在线，伪造不了)；
+  //   留空则用本地签名码(离线模式，配 抽奖核验.html 校验)。例：'https://你的域名' 或 'http://localhost:8799'
+  apiBase: '',
+  secret: 'beta-41be3654ef80',   // 离线模式用：必须与 抽奖核验.html 里的 SECRET 一致（在线模式可忽略）
+  prizeText: 'Rate the game to claim a one-time lottery code — enter the draw to win: bubble tea vouchers / stationery packs / mystery boxes 🎁',
+  formUrl: '',   // 外部抽奖登记表链接（腾讯问卷 / 金数据 / Google 表单等）；留空则只显示手动提交说明
+  howto: 'Submit the code together with your name + class in the sign-up form (or hand it to the event organizer). One entry per person — duplicates don\'t count.',
+  onlyOnce: true,    // true = 整个浏览器会话只发一个码（避免反复刷码）
+};
+// 评分标签(bit0..5)——玩家可见，须与 抽奖核验.html / admin.html 的 RW_TAGS 顺序一致
+const RW_TAGS = ['Fun 🎮','Great art 🎨','Want more 🔥','Made me think 💡','Too hard 😵','Slow pacing 🐢'];
+
+// ---- 抽奖码：纯JS签名(无需联网/安全上下文)，生成与核验共用同一套函数 ----
+const B32='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function b32enc(bytes){ let bits=0,val=0,out=''; for(const b of bytes){ val=(val<<8)|b; bits+=8;
+  while(bits>=5){ out+=B32[(val>>>(bits-5))&31]; bits-=5; } } if(bits>0) out+=B32[(val<<(5-bits))&31]; return out; }
+function cyrb53(str, seed){ let h1=0xdeadbeef^seed, h2=0x41c6ce57^seed;
+  for(let i=0;i<str.length;i++){ const ch=str.charCodeAt(i); h1=Math.imul(h1^ch,2654435761); h2=Math.imul(h2^ch,1597334677); }
+  h1=Math.imul(h1^(h1>>>16),2246822507); h1^=Math.imul(h2^(h2>>>13),3266489909);
+  h2=Math.imul(h2^(h2>>>16),2246822507); h2^=Math.imul(h1^(h1>>>13),3266489909);
+  return 4294967296*(2097151&h2)+(h1>>>0); }
+// 6位 base32 签名（generator 与 verifier 必须用相同实现）
+function sigOf(secret, payload){ let v=cyrb53(secret+'|'+payload, (0x9e3779b9 ^ (cyrb53(secret,1)&0xffff))>>>0);
+  let s=''; for(let i=0;i<6;i++){ s=B32[v%32]+s; v=Math.floor(v/32); } return s; }
+function lotteryDeviceTag(){ let t=null; try{ t=localStorage.getItem('cmp_devtag'); }catch(e){}
+  if(!t){ const a=new Uint8Array(3); (self.crypto&&crypto.getRandomValues)?crypto.getRandomValues(a):a.forEach((_,i)=>a[i]=(Math.random()*256)|0);
+    t=b32enc(a).slice(0,4); try{ localStorage.setItem('cmp_devtag',t); }catch(e){} } return t; }
+// 持久的浏览器标识，用于在线模式「一个浏览器只发一个码」(服务器按它幂等去重)
+function lotteryClientId(){ let id=null; try{ id=localStorage.getItem('cmp_client'); }catch(e){}
+  if(!id){ const a=new Uint8Array(8); (self.crypto&&crypto.getRandomValues)?crypto.getRandomValues(a):a.forEach((_,i)=>a[i]=(Math.random()*256)|0);
+    id=b32enc(a); try{ localStorage.setItem('cmp_client',id); }catch(e){} } return id; }
+// 生成码：里程碑(1位) 评分(1位) 标签bitmask(2位hex) 设备tag(4位) 随机nonce(4位) + 签名(6位)
+function makeLotteryCode({milestone, rating, tags}){
+  const m=String(Math.max(1,Math.min(9,milestone))), r=String(Math.max(1,Math.min(5,rating)));
+  const t=((tags|0)&63).toString(16).toUpperCase().padStart(2,'0');
+  const dev=lotteryDeviceTag();
+  const na=new Uint8Array(3); (self.crypto&&crypto.getRandomValues)?crypto.getRandomValues(na):na.forEach((_,i)=>na[i]=(Math.random()*256)|0);
+  const nonce=b32enc(na).slice(0,4);
+  const payload=(m+r+t+dev+nonce).toUpperCase();        // 12 字符
+  const raw=(payload+sigOf(LOTTERY.secret,payload)).toUpperCase();  // +6 = 18
+  return 'PE-'+raw.match(/.{1,4}/g).join('-');           // 如 PE-1530-WXYZ-7K2Q-9FX-A...
+}
+const ART="assets/arts/", ART_ANIME="assets/arts_anime/", SND="assets/sounds/";
+let artMode='anime';   // 'photo' | 'anime' — anime art is complete (every referenced sprite has a version),
+                       // and the cinematic opening is always anime, so default to anime for a consistent look.
+const ANIME_SKIP=new Set(['button.png','buttonTitle.png','card.png','title.png','ui.png','fullevidentword.png']);
+function artDir(f){ return (artMode==='anime' && !ANIME_SKIP.has(f)) ? ART_ANIME : ART; }
+const img = f => f ? artDir(f)+encodeURIComponent(f) : "";
+
+let DATA=null, S=null;           // S = current scene model
+let sceneKey="1";
+let playerParty=null;            // 0 dem / 1 rep
+let showHUD=false;
+let openingStyle='cinematic';    // 'cinematic' (animated montage) | 'new' (text cold open) | 'old' (original narration)
+let playerMotivation=null, playerSlogan='';
+let firstCardTaught=false;
+
+const MOTIVES=[
+  {key:'voice',   line:"They decide our schools, our phones, our future — without ever asking us.", tag:'Your Voice', slogan:"Nothing about us, without us."},
+  {key:'climate', line:"The planet's running out of time, and no one in charge is acting.", tag:'Our Future', slogan:"Our planet. Our turn."},
+  {key:'ai',      line:"AI and the feed are reshaping our generation — with no say from us.", tag:'Tech & You', slogan:"Our generation. Our rules."},
+];
+
+// ---- audio ----
+let bgm=new Audio(); bgm.loop=true; bgm.volume=.5;
+function playBGM(file){ if(!file){bgm.pause();return;} const src=SND+file; if(bgm.src.endsWith(encodeURIComponent(file))) return; bgm.src=src; bgm.play().catch(()=>{});}
+
+// ---- scaling ----
+function rescale(){ const s=Math.min(innerWidth/1600, innerHeight/900);
+  document.getElementById('stage').style.transform=`scale(${s})`; }
+addEventListener('resize',rescale); rescale();
+
+// ---- helpers ----
+const $=id=>document.getElementById(id);
+function fade(on){ return new Promise(r=>{ const f=$('fade'); f.classList.toggle('on',on); setTimeout(r,650);});}
+function toast(t){ const e=$('toast'); e.textContent=t; e.classList.add('show'); clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove('show'),1500);}
+function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show')); if(id)$(id).classList.add('show'); }
+function el(tag,cls,html){const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e;}
+
+// ================= GAME STATE =================
+const G = {
+  state:'title',     // title|narr|investigate|party|battle|end
+  bgIndex:0,
+  cardsGet:[],       // bool[6] discovered
+  // battle
+  round:0, pointsEarned:0, currentQuestion:0, usingCard:false,
+};
+
+// ================= DIALOGUE ENGINE =================
+const D = {
+  queue:[], idx:0, owner:'', name2:'', switchIndex:0, sprite2:null,
+  isBattle:false, isResponse:false, isDone:false, onClose:null, active:false,
+};
+function startDialogue(npc, opts={}){
+  D.queue=[...npc.dialogueTexts]; D.idx=0;
+  D.owner=npc.name||''; D.name2=npc.name2||''; D.switchIndex=npc.switchIndex||0; D.sprite2=npc.sprite2||null;
+  D.isBattle=!!opts.battle; D.isResponse=false; D.isDone=!!opts.investigationDone;
+  D.onClose=opts.onClose||null; D.active=true;
+  $('dlg').style.display='block';
+  // set current npc sprite (for switch)
+  if(npc.sprite!==undefined && npc.sprite!==null){ setNPC(npc.sprite,true); }
+  next();
+}
+function showResponseLine(text, onClose){
+  D.queue=[text]; D.idx=0; D.isBattle=false; D.isResponse=true; D.isDone=false;
+  D.owner=''; D.switchIndex=0; D.active=true; D.onClose=onClose;
+  $('dlg').style.display='block'; next();
+}
+function next(){
+  if(D.idx>=D.queue.length){ // finished
+    $('dlg').style.display='none'; D.active=false;
+    const cb=D.onClose; D.onClose=null; if(cb) cb();
+    return;
+  }
+  // name switch
+  if(D.switchIndex>0 && D.idx>=D.switchIndex){
+    D.owner=D.name2 || D.owner;
+    if(D.sprite2){ setNPC(D.sprite2,true); }
+  }
+  let s=D.queue[D.idx]; D.idx++;
+  let nm;
+  if(s.startsWith('{s}')){ s=s.slice(3); nm=''; }
+  else if(s.startsWith('{y}')){ s=s.slice(3); nm='You'; }
+  else { nm = D.isResponse ? '' : D.owner; }
+  $('name').textContent=nm; $('name').style.display=nm?'inline-block':'none';
+  $('dtext').textContent=s;
+}
+$('dlg').onclick=()=>{ if(D.active) next(); };
+function resetDialogue(){ D.active=false; D.onClose=null; D.queue=[]; D.idx=0; $('dlg').style.display='none'; }
+
+// ================= NPC sprite =================
+function setNPC(file, clickable){
+  const n=$('npc');
+  if(!file){ n.style.opacity=0; n.classList.remove('clickable'); n.onclick=null; n.dataset.file=''; return; }
+  n.dataset.file=file; n.src=img(file); n.style.opacity=1;
+  n.classList.toggle('clickable',!!clickable);
+}
+function setBG(file){ const b=$('bg'); b.dataset.file=file||''; b.src=img(file); }
+function refreshArt(){
+  const b=$('bg'); if(b.dataset.file) b.src=img(b.dataset.file);
+  const n=$('npc'); if(n.dataset.file) n.src=img(n.dataset.file);
+}
+function clearNPC(){ const n=$('npc'); n.style.opacity=0; n.classList.remove('clickable'); n.onclick=null; }
+
+// ================= SCENE LOADING =================
+async function loadScene(key, opts={}){
+  sceneKey=key; S=DATA[key];
+  resetDialogue();
+  { const h=$('hand'); h.innerHTML=''; h.onmouseenter=null; h.onmouseleave=null; h.style.transform='translateY(120%)'; }
+  G.bgIndex=0; G.round=0; G.pointsEarned=0; G.usingCard=false;
+  G.cardsGet=S.cardData.map(()=>false);
+  // which cards are actually obtainable here (NOT always all 6 — ch3 only grants 2).
+  // gate completion on these so the scene can't soft-lock.
+  S._obtain=(()=>{ const s=new Set(); S.backgrounds.forEach(bg=>bg.npcs.forEach(n=>{
+    if(n.cardIdToGet)s.add(n.cardIdToGet); if(n.cardIdToGet2)s.add(n.cardIdToGet2); })); return [...s].sort((a,b)=>a-b); })();
+  S.backgrounds.forEach(bg=>bg.npcs.forEach(n=>{ n._done=false; })); // reset for replay
+  // intro narrative
+  showScreen(null); $('hand').style.transform='translateY(120%)';
+  await fade(true);
+  $('topbar').style.display='none'; document.querySelector('.arrowrow').style.display='none'; clearNPC();
+  if(!opts.skipIntro){
+    // chapter title
+    await narrate(S.narrative.chapter, true);
+    // intro text
+    if(S.narrative.intro) await narrate(S.narrative.intro, false);
+  }
+  // begin investigation
+  G.state='investigate';
+  showScreen(null);
+  $('topbar').style.display='flex'; document.querySelector('.arrowrow').style.display='flex';
+  playBGM(S.sceneBGM);
+  buildInvPips(); updateInvProgress();
+  switchBackground(0);
+  renderHand(false);
+  await fade(false);
+}
+
+function narrate(text, isTitle){
+  return new Promise(res=>{
+    if(!text){ res(); return; }
+    showScreen('narrScreen');
+    $('narrTitle').style.display = isTitle?'block':'none';
+    if(isTitle){ $('narrTitle').textContent=text; $('narrText').textContent=''; }
+    else { $('narrText').textContent=text; $('narrTitle').textContent=''; }
+    fade(false);
+    const handler=async ()=>{ $('narrScreen').removeEventListener('click',handler);
+      showScreen(null); res(); };
+    setTimeout(()=>$('narrScreen').addEventListener('click',handler), 350);
+  });
+}
+
+// ================= INVESTIGATION =================
+function switchBackground(i){
+  const bgs=S.backgrounds; if(!bgs.length) return;
+  G.bgIndex=((i%bgs.length)+bgs.length)%bgs.length;
+  const bg=bgs[G.bgIndex];
+  setBG(bg.sprite);
+  updateLocLabels();
+  // place first npc of this background (faithful: one clickable npc shown)
+  placeBackgroundNPCs(bg);
+}
+function locRemaining(bg){ return bg.npcs.filter(n=>!n._done).length; }
+// current location header + arrows show where people still are (• has people / ✓ done)
+function updateLocLabels(){
+  const bgs=S.backgrounds; if(!bgs.length) return;
+  const bg=bgs[G.bgIndex];
+  const ni=(G.bgIndex+1)%bgs.length, pi=(G.bgIndex-1+bgs.length)%bgs.length;
+  const rem=locRemaining(bg);
+  $('loc').innerHTML=(bg.name||'')+(rem>0
+      ? ` <span class="locmark">${rem} to meet</span>`
+      : ` <span class="locmark done">✓ done</span>`);
+  const mk=b=>locRemaining(b)>0?'<span style="color:#ffd36e">•</span>':'<span style="color:#7CFC9A">✓</span>';
+  $('nextBtn').innerHTML=(bgs[ni].name||'')+' '+mk(bgs[ni])+' ▶';
+  $('prevBtn').innerHTML='◀ '+mk(bgs[pi])+' '+(bgs[pi].name||'');
+  $('prevBtn').style.visibility = bgs.length<=2 ? 'hidden':'visible';
+}
+function buildInvPips(){ const p=$('invpips'); p.innerHTML=''; (S._obtain||[]).forEach(()=>p.appendChild(el('i'))); }
+function invObtainedCount(){ return (S._obtain||[]).filter(id=>G.cardsGet[id-1]).length; }
+function updateInvProgress(){
+  const bar=$('invbar');
+  if(G.state!=='investigate'){ bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  const got=invObtainedCount(), tot=(S._obtain||[]).length;
+  $('invnum').textContent=got+'/'+tot;
+  [...$('invpips').children].forEach((c,i)=>c.classList.toggle('on', i<got));
+}
+let bgNpcCursor=0;
+function placeBackgroundNPCs(bg){
+  // original spawns ALL npcs in container but stacked; first is clickable.
+  // We show npcs one at a time; clicking advances through them.
+  bgNpcCursor=0; showBgNpc(bg);
+}
+function showBgNpc(bg){
+  const remaining=bg.npcs.filter(n=>!n._done);
+  if(remaining.length===0){ clearNPC(); return; }
+  const npc=remaining[0];
+  setNPC(npc.sprite,true);
+  $('npc').onclick=()=>{
+    if(D.active) return;
+    startDialogue(npc,{onClose:()=>{
+      npc._done=true;
+      // award cards
+      grantCard(npc.cardIdToGet); grantCard(npc.cardIdToGet2);
+      updateInvProgress(); updateLocLabels();
+      checkAllCards();
+      showBgNpc(bg);
+    }});
+  };
+}
+function grantCard(id){
+  if(!id || id<1 || id>G.cardsGet.length) return;
+  if(!G.cardsGet[id-1]){ G.cardsGet[id-1]=true; renderHand(false); updateInvProgress();
+    if(!firstCardTaught){ firstCardTaught=true; toast("You wrote down their idea — ammunition for the debate stage."); }
+    else toast('Card discovered: '+(S.cardData[id-1].title));
+  }
+}
+function checkAllCards(){
+  if(G.state!=='investigate') return;
+  // gate on cards actually obtainable in THIS scene (not a hard-coded 6)
+  const done = (S._obtain||[]).length>0 && S._obtain.every(id=>G.cardsGet[id-1]);
+  if(done){
+    setTimeout(()=>{
+      clearNPC(); $('invbar').classList.remove('show');
+      startDialogue({name:'',dialogueTexts:['Investigation complete.'],switchIndex:0},
+        {investigationDone:true, onClose:onInvestigationDone});
+    },400);
+  }
+}
+async function onInvestigationDone(){
+  resetDialogue();
+  $('topbar').style.display='none'; document.querySelector('.arrowrow').style.display='none';
+  $('invbar').classList.remove('show'); clearNPC();
+  { const h=$('hand'); h.onmouseenter=null; h.onmouseleave=null; h.style.transform='translateY(120%)'; } // stop tray peeking over overlay
+  // reward milestone: rate the game -> get a one-time lottery code (over the investigation scene)
+  await maybeRewardMilestone(S.level+1);
+  await fade(true);
+  if(S.narrative.transit) await narrate(S.narrative.transit,false);
+  await fade(true);
+  // -> party (scene1) or battle
+  if(S.level===0){ showScreen('partyScreen'); await fade(false); }
+  else { await startBattle(); }
+}
+
+$('prevBtn').onclick=()=>{ if(G.state==='investigate'&&!D.active) switchBackground(G.bgIndex-1); };
+$('nextBtn').onclick=()=>{ if(G.state==='investigate'&&!D.active) switchBackground(G.bgIndex+1); };
+
+// ================= PARTY =================
+$('demBtn').onclick=()=>chooseParty(0);
+$('repBtn').onclick=()=>chooseParty(1);
+async function chooseParty(p){
+  playerParty=p;
+  showScreen(null); await fade(true);
+  if(S.narrative.chosen){ await narrate(S.narrative.chosen,false); await fade(true);}
+  await startBattle();
+}
+
+// ================= BATTLE =================
+async function startBattle(){
+  resetDialogue();
+  G.state='battle'; G.round=0; G.pointsEarned=0; G.usingCard=false;
+  if(playerParty===null) playerParty=0;
+  showScreen(null);
+  setBG(S.cardBattleBackground);
+  $('loc').textContent=''; $('topbar').style.display='flex';
+  document.querySelector('.arrowrow').style.display='none';
+  playBGM(S.battleBGM);
+  renderHand(true);
+  $('hand').style.transform='translateY(120%)'; // hidden until question
+  $('invbar').classList.remove('show');
+  hideQBanner(); $('rresult').classList.remove('show');
+  updateHUD(); updateMeter();
+  await fade(false);
+  pushBattleNPC(0);
+  if(S.level===2) autoStartBattleNPC();
+}
+let curBattleNpc=null;
+function pushBattleNPC(round){
+  if(round>=0 && round<S.cardBattleNpcs.length){
+    curBattleNpc=S.cardBattleNpcs[round];
+    setNPC(curBattleNpc.sprite,true);
+    $('npc').onclick=()=>{ if(!D.active && !G.usingCard) startBattleDialogue(); };
+  } else { curBattleNpc=null; clearNPC(); }
+}
+function autoStartBattleNPC(){ if(curBattleNpc) startBattleDialogue(); }
+// ---- legible-battle feedback ----
+function showQBanner(qtype){
+  const m=QTYPE_META[qtype]||{mood:'',wants:''};
+  const b=$('qbanner');
+  b.innerHTML=`<div class="qh">${m.mood} ${m.wants}</div>`;
+  b.classList.add('show');
+}
+function hideQBanner(){ $('qbanner').classList.remove('show'); }
+function showRResult(level, partyBonus, total){
+  const palette=['#ff8a8a','#ffd36e','#7CFC9A']; // fell flat / partial / strong
+  const labels=['Fell flat','Partial match','Strong match'];
+  const r=$('rresult');
+  r.innerHTML=`<div class="pts" style="color:${palette[level]}">+${total}</div>
+    <div class="lbl" style="color:${palette[level]}">${TYPE_META_match(level)} ${labels[level]}</div>
+    ${partyBonus?'<div class="bonus">+1 your party rallies behind you</div>':''}`;
+  r.classList.add('show');
+  clearTimeout(r._t); r._t=setTimeout(()=>r.classList.remove('show'),1500);
+}
+function TYPE_META_match(level){ return ['😕','👍','🔥'][level]; }
+function updateMeter(){
+  const bar=$('mbar');
+  if(G.state!=='battle'){ bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  const max=15; // 5 rounds × 3 max each
+  const goal=S.pointsToWin;
+  $('mbarFill').style.width=Math.min(100,(G.pointsEarned/max)*100)+'%';
+  $('mbarGoal').style.left=`calc(${(goal/max)*100}% - 1px)`;
+  const reached=G.pointsEarned>=goal;
+  $('mbarLabel').innerHTML=`Round <b>${Math.min(G.round+1,5)}</b>/5 · Momentum <b>${G.pointsEarned}</b> `+
+    (reached?`· <b style="color:#7CFC9A">winning</b>`:`· need <b>${goal}</b> to win`);
+}
+function startBattleDialogue(){
+  const npc=curBattleNpc; if(!npc) return;
+  startDialogue(npc,{battle:true,onClose:()=>{
+    G.currentQuestion=npc.questionType; G.usingCard=true;
+    showQBanner(npc.questionType);
+    $('hand').style.transform='translateY(0)';
+    setHandUsable(true);
+  }});
+}
+function earnPoints(card){
+  if(!G.usingCard) return;
+  G.usingCard=false; setHandUsable(false); $('hand').style.transform='translateY(120%)';
+  hideQBanner();
+  let point=0;
+  const q=G.currentQuestion, t=card.type;
+  if(q===0){ if(t===0)point+=2; else if(t===1)point+=1; }
+  else if(q===1){ if(t===1)point+=2; else if(t===2)point+=1; }
+  else if(q===2){ if(t===2)point+=2; else if(t===0)point+=1; }
+  const responseLevel=point;
+  const partyBonus=(card.party===playerParty);
+  if(partyBonus) point++;
+  G.pointsEarned+=point; G.round++;
+  showRResult(responseLevel, partyBonus, point);
+  updateHUD(); updateMeter();
+  // next npc pushed now (faithful)
+  if(G.round<5) pushBattleNPC(G.round);
+  showResponseLine(S.responses[responseLevel]||'...', ()=>{
+    if(G.round>=5){ checkWin(); }
+    else if(S.level===2){ autoStartBattleNPC(); }
+  });
+}
+function checkWin(){
+  const win = G.pointsEarned>=S.pointsToWin;
+  endScene(win);
+}
+
+// ================= CARDS / HAND =================
+// 沉浸设计：卡面不标党派/类型/颜色——玩家须从论述文本本身判断这是什么风格、什么立场的回应
+function cardEl(c, faceUp){
+  const e=el('div','card'+(faceUp?'':' locked'));
+  e.innerHTML=`<div class="ct">${faceUp?c.title:'? ? ?'}</div>
+    <div class="cd">${faceUp?c.description:'Not yet discovered'}</div>`;
+  return e;
+}
+function renderHand(battle){
+  const h=$('hand'); h.innerHTML=''; h.style.pointerEvents='none';
+  if(battle){
+    S.cardData.forEach(c=>{ const e=cardEl(c,true); e._card=c; h.appendChild(e); });
+    h.style.transform='translateY(120%)';
+  } else {
+    // investigation: show discovered cards small tray, click to view detail
+    let any=false;
+    S.cardData.forEach((c,i)=>{ const got=G.cardsGet[i]; const e=cardEl(c,got);
+      if(got){ any=true; e.onclick=()=>showDetail(c); e.style.pointerEvents='auto'; e.style.cursor='zoom-in'; }
+      h.appendChild(e); });
+    h.style.transform = any ? 'translateY(64%)' : 'translateY(120%)';
+    h.onmouseenter=()=>{ if(any) h.style.transform='translateY(0)'; };
+    h.onmouseleave=()=>{ if(any) h.style.transform='translateY(64%)'; };
+  }
+}
+// 六张卡每回合都可用（不设冷却/消耗）——同一话术可在不同问题上反复使用
+function setHandUsable(on){
+  const cards=[...$('hand').children];
+  cards.forEach(e=>{ if(on){ e.classList.add('usable'); e.onclick=()=>earnPoints(e._card); }
+    else { e.classList.remove('usable'); e.onclick=null; } });
+}
+function showDetail(c){ const d=$('detail'); $('detailCard').className='card';
+  $('detailCard').innerHTML=cardEl(c,true).innerHTML; d.style.display='flex'; }
+$('detail').onclick=()=>{ $('detail').style.display='none'; };
+
+// ================= REWARD / LOTTERY =================
+let rwRating=0, rwTagBits=0, rwResolve=null;
+function rwShowPane(id){ ['rwCelebrate','rwRate','rwCode'].forEach(p=>$(p).classList.toggle('show', p===id)); }
+function rwBuildRate(){
+  rwRating=0; rwTagBits=0;
+  const stars=$('rwStars'); stars.innerHTML='';
+  for(let i=1;i<=5;i++){ const s=el('span','st','★'); s.onclick=()=>{ rwRating=i;
+    [...stars.children].forEach((c,idx)=>c.classList.toggle('on',idx<i)); }; stars.appendChild(s); }
+  const tg=$('rwTags'); tg.innerHTML='';
+  RW_TAGS.forEach((t,i)=>{ const b=el('button','rwtag',t); b.onclick=()=>{ rwTagBits^=(1<<i); b.classList.toggle('on'); }; tg.appendChild(b); });
+  $('rwText').value='';
+}
+function rwShowCode(code, online){
+  $('rwCodeBox').textContent=code;
+  let html=(LOTTERY.prizeText?('<div style="color:#ffe9b0;margin-bottom:8px">'+LOTTERY.prizeText+'</div>'):'')+LOTTERY.howto;
+  if(LOTTERY.apiBase && online===false)
+    html+='<div style="color:#ffce6b;margin-top:8px;font-size:16px">⚠️ Couldn\'t reach the server — this is an offline backup code. If the form won\'t accept it, screenshot it and send it to the event organizer.</div>';
+  $('rwHowto').innerHTML=html;
+  const gf=$('rwGoForm');
+  if(LOTTERY.formUrl){ gf.style.display='inline-block'; gf.onclick=()=>window.open(LOTTERY.formUrl,'_blank','noopener'); }
+  else gf.style.display='none';
+  rwShowPane('rwCode');
+}
+// 在线优先：调后端拿“真发真核销”的码；连不上则降级本地签名码，不卡住活动
+async function rwIssue(milestone){
+  const rating=rwRating||5, tags=rwTagBits, text=($('rwText').value||'').trim();
+  let code=null, online=false;
+  if(LOTTERY.apiBase){
+    try{
+      const r=await fetch(LOTTERY.apiBase.replace(/\/$/,'')+'/api/issue',{method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({rating, tags, text, milestone, clientId:lotteryClientId()})});
+      const d=await r.json(); if(d&&d.code){ code=d.code; online=true; }
+    }catch(e){ /* 降级 */ }
+  }
+  if(!code) code=makeLotteryCode({milestone, rating, tags});
+  const entry={code, rating, tags, text, milestone, online, t:Date.now()};
+  try{ sessionStorage.setItem('cmp_entry', JSON.stringify(entry));
+    const all=JSON.parse(localStorage.getItem('cmp_feedback')||'[]'); all.push(entry);
+    localStorage.setItem('cmp_feedback', JSON.stringify(all)); }catch(e){}
+  return {code, online};
+}
+$('rwCopy').onclick=()=>{ const c=$('rwCodeBox').textContent;
+  (navigator.clipboard?navigator.clipboard.writeText(c):Promise.reject()).then(()=>toast('Copied ✓')).catch(()=>{
+    const r=document.createRange(); r.selectNodeContents($('rwCodeBox')); const sel=getSelection();
+    sel.removeAllRanges(); sel.addRange(r); toast('Selected — press Ctrl/⌘+C to copy'); }); };
+function rwFinish(){ showScreen(null); const f=rwResolve; rwResolve=null; if(f) f(); }
+$('rwDone').onclick=rwFinish; $('rwSkip1').onclick=rwFinish; $('rwSkip2').onclick=rwFinish;
+$('rwRateBtn').onclick=()=>{ rwBuildRate(); rwShowPane('rwRate'); };
+$('rwSubmit').onclick=async()=>{ if(!rwRating){ toast('Tap the stars to rate first ⭐'); return; }
+  const btn=$('rwSubmit'); if(btn.disabled) return; btn.disabled=true; const old=btn.textContent; btn.textContent='Generating…';
+  const {code, online}=await rwIssue(+($('rewardScreen').dataset.ms||1));
+  btn.disabled=false; btn.textContent=old;
+  rwShowCode(code, online); };
+// shown at the investigation card-collection milestone; resolves when the player dismisses it
+function maybeRewardMilestone(milestone){
+  return new Promise(res=>{
+    if(!LOTTERY.enabled){ res(); return; }
+    rwResolve=res; $('rewardScreen').dataset.ms=milestone;
+    let prior=null; try{ prior=JSON.parse(sessionStorage.getItem('cmp_entry')||'null'); }catch(e){}
+    if(LOTTERY.onlyOnce && prior && prior.code){   // already issued this session: let them recopy, then continue
+      showScreen('rewardScreen'); rwShowCode(prior.code, prior.online); return;
+    }
+    $('rwTitle').textContent='🎉 Evidence Complete!';
+    $('rwSub').textContent=LOTTERY.prizeText;
+    rwShowPane('rwCelebrate'); showScreen('rewardScreen');
+  });
+}
+
+// ================= END =================
+async function endScene(win){
+  G.state='end'; clearNPC(); $('hand').style.transform='translateY(120%)';
+  hideQBanner(); $('mbar').classList.remove('show'); $('rresult').classList.remove('show');
+  await fade(true);
+  let txt = win ? (S.narrative.win||'You won.') : (S.narrative.lose||'Unfortunately, this run ends here.');
+  $('endText').textContent=txt;
+  let nextKey=null;
+  if(win){
+    if(S.level===0) nextKey=(playerParty===0?'2-D':'2-R');
+    else if(S.level===1) nextKey=(playerParty===0?'3-D':'3-R');
+    else nextKey=null; // final win
+  }
+  const btn=$('endBtn');
+  if(win && nextKey){ btn.textContent='Next Chapter ▶'; btn.onclick=()=>loadScene(nextKey); }
+  else if(win && !nextKey){ btn.textContent='★ You won the Presidency — Play Again'; btn.onclick=()=>restart(); }
+  else { btn.textContent='↻ Retry Battle'; btn.onclick=()=>{ showScreen(null); startBattle(); }; }
+  showScreen('endScreen'); $('topbar').style.display='none';
+  await fade(false);
+  updateHUD();
+}
+function restart(){ playerParty=null; goToTitle(); }
+
+// ================= HUD / DEV =================
+function updateHUD(){ const h=$('hud');
+  h.style.display = (showHUD && G.state==='battle') ? 'block':'none';
+  if(G.state==='battle') h.innerHTML=`Round ${Math.min(G.round+1,5)}/5 &nbsp;|&nbsp; Score ${G.pointsEarned}/${S.pointsToWin} &nbsp;|&nbsp; ${PARTY_NAMES[playerParty]}`;
+}
+$('hudToggle').onclick=()=>{ showHUD=!showHUD; updateHUD(); };
+$('skipBtn').onclick=async()=>{ if(!S)return; if(S.level===0&&playerParty===null)playerParty=0; await startBattle(); };
+
+// ================= NEW OPENING (cold open + motivation) =================
+function showColdLines(lines){
+  return new Promise(res=>{
+    const c=$('coldLines'); c.innerHTML=''; $('coldHint').style.display='none';
+    const els=lines.map(l=>{ const d=el('div','coldline'+(l.big?' big':'')); d.textContent=l.t; c.appendChild(d); return d; });
+    let i=0, done=false, timer=null;
+    function revealNext(){
+      if(i>=els.length){ done=true; $('coldHint').style.display='block'; return; }
+      els[i].classList.add('in'); i++; timer=setTimeout(revealNext, 1700);
+    }
+    function onClick(){
+      if(!done){ clearTimeout(timer); els.forEach(e=>e.classList.add('in')); i=els.length; done=true; $('coldHint').style.display='block'; }
+      else { $('coldOpen').removeEventListener('click',onClick); res(); }
+    }
+    $('coldOpen').addEventListener('click',onClick);
+    revealNext();
+  });
+}
+
+async function runNewOpening(){
+  firstCardTaught=false;
+  await fade(true);
+  $('topbar').style.display='none'; document.querySelector('.arrowrow').style.display='none'; clearNPC();
+  showScreen(null);
+  // --- COLD OPEN ---
+  $('coldOpen').classList.add('show');
+  // 先构建内容并挂好监听器（此时画面仍黑）：淡入期间可点，且不会闪现上一局残留台词
+  const coldPromise=showColdLines([
+    {t:'Election Night.', big:true},
+    {t:'Two hundred million votes counted. It comes down to one state.'},
+    {t:'And the whole country is waiting on you.'},
+    {t:'Eighteen months ago, nobody knew your name.'},
+    {t:'This is where it started.', big:true},
+  ]);
+  await fade(false);
+  await coldPromise;
+  await fade(true);
+  $('coldOpen').classList.remove('show');
+  await runMotivationFlow();
+}
+
+// pick the issue you'll run on + slogan + a short bridge into the neighborhood
+async function runMotivationFlow(){
+  $('motivePrompt').textContent="Out of everything wrong — which one are you running to fix?";
+  const opts=$('motiveOpts'); opts.innerHTML='';
+  const motPromise=new Promise(res=>{
+    MOTIVES.forEach(m=>{ const b=el('button','motbtn'); b.innerHTML='“'+m.line+'”<small>'+m.tag+'</small>'; b.onclick=()=>res(m); opts.appendChild(b); });
+  });
+  showScreen('motiveScreen');
+  await fade(false);
+  const mot=await motPromise;
+  playerMotivation=mot.key;
+  await fade(true);
+  $('sloganInput').value=mot.slogan;
+  // 监听器在淡入前就挂上——淡入期间的点击不再被吞
+  const goPromise=new Promise(res=>{ $('sloganGo').onclick=()=>res(); });
+  showScreen('sloganScreen');
+  await fade(false);
+  await goPromise;
+  playerSlogan=($('sloganInput').value||'').trim()||mot.slogan;
+  await fade(true);
+  showScreen(null);
+  $('coldOpen').classList.add('show');
+  const bridgePromise=showColdLines([
+    {t:"But every campaign starts somewhere."},
+    {t:"It starts on your street."},
+    {t:'— '+playerSlogan+' —', big:true},
+  ]);
+  await fade(false);
+  await bridgePromise;
+  await fade(true);
+  $('coldOpen').classList.remove('show');
+  showScreen(null);
+}
+
+// cinematic animated opening (issue scenes + POV rise), played via the standalone intro file
+let _cineN=0;
+function runCinematicOpening(){
+  return new Promise(res=>{
+    firstCardTaught=false;
+    $('topbar').style.display='none'; document.querySelector('.arrowrow').style.display='none'; clearNPC(); showScreen(null);
+    const wrap=$('cineWrap'), frame=$('cineFrame');
+    let done=false;
+    const finish=()=>{ if(done) return; done=true; clearTimeout(timer);
+      wrap.onclick=null; wrap.classList.remove('show'); frame.src='about:blank';
+      $('fade').classList.add('on'); res(); };
+    wrap.classList.add('show'); $('fade').classList.remove('on');
+    frame.src='about:blank';
+    setTimeout(()=>{ if(!done) frame.src='intro-anim.html?cb='+(++_cineN)+'_'+Date.now(); }, 30);
+    const timer=setTimeout(finish, 24300);   // matches the 24s animation
+    wrap.onclick=null; setTimeout(()=>{ if(!done) wrap.onclick=finish; }, 1200);  // click anywhere to skip (armed after 1.2s)
+  });
+}
+
+function goToTitle(){
+  resetDialogue(); G.state='title';
+  $('topbar').style.display='none'; document.querySelector('.arrowrow').style.display='none';
+  const h=$('hand'); h.innerHTML=''; h.onmouseenter=null; h.onmouseleave=null; h.style.transform='translateY(120%)';
+  clearNPC(); hideQBanner(); $('mbar').classList.remove('show'); $('rresult').classList.remove('show');
+  $('invbar').classList.remove('show');
+  $('coldOpen').classList.remove('show'); showScreen('titleScreen');
+  $('fade').classList.remove('on'); playBGM('title.mp3');
+}
+
+// ================= BOOT =================
+$('startBtn').onclick=async()=>{
+  playBGM('title.mp3'); bgm.pause();
+  playerParty=null; playerMotivation=null; playerSlogan=''; firstCardTaught=false;
+  if(openingStyle==='cinematic'){ await runCinematicOpening(); await runMotivationFlow(); await loadScene('1',{skipIntro:true}); }
+  else if(openingStyle==='new'){ await runNewOpening(); await loadScene('1',{skipIntro:true}); }
+  else { await loadScene('1'); }
+};
+$('artToggle').onclick=()=>{ artMode=(artMode==='photo'?'anime':'photo'); $('artToggle').textContent='art: '+artMode.toUpperCase();
+  refreshArt(); if(G.state==='title') $('titleScreen').style.backgroundImage=`url('${img('title.png')}')`; };
+// if an anime file is missing, fall back to the photo version automatically
+$('bg').onerror=()=>{ if(artMode==='anime'&&$('bg').dataset.file) $('bg').src=ART+encodeURIComponent($('bg').dataset.file); };
+$('npc').onerror=()=>{ if(artMode==='anime'&&$('npc').dataset.file) $('npc').src=ART+encodeURIComponent($('npc').dataset.file); };
+$('openToggle').onclick=()=>{ const order=['cinematic','new','old']; openingStyle=order[(order.indexOf(openingStyle)+1)%3];
+  $('openToggle').textContent='opening: '+(openingStyle==='cinematic'?'CINE':openingStyle.toUpperCase()); };
+$('toTitleBtn').onclick=()=>goToTitle();
+async function boot(){
+  DATA=await (await fetch('data/scenes.json')).json();
+  // title bg
+  $('titleScreen').style.backgroundImage=`url('${img('title.png')}')`;
+  showScreen('titleScreen');
+  $('devinfo').textContent='beta v1.2 · collect all the evidence to earn a lottery code 🎟️';
+  // title music on first interaction
+  document.body.addEventListener('pointerdown',()=>{ if(G.state==='title') playBGM('title.mp3'); },{once:true});
+}
+boot();
+</script>
+</body>
+</html>
