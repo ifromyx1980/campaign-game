@@ -64,7 +64,7 @@
       "name2": "",
       "switchIndex": 0,
       "dialogueTexts": [
-       "{s}You walk to the edge of town and find a ruined park.  An older resident stands among broken paths.",
+       "{s}You walk to the edge of town and find a ruined park. An older resident stands among broken paths.",
        "I hope they build a new park here.",
        "Doesn’t the town feel too serious and silent these days?",
        "Doesn’t the town feel too serious and silent these days?",
@@ -213,7 +213,7 @@
     "dialogueTexts": [
      "{s}An older man near the aisle stands, gripping his seat.",
      "Every option sounds risky. Moving too slowly already hurts us.",
-     "We’ve heard promises before.  So tell me—what’s different this time?",
+     "We’ve heard promises before. So tell me—what’s different this time?",
      "{s}The room falls silent, waiting.",
      "{s}This moment is not about statistics or fine print; it is about whether you are willing to act and let them hold you responsible."
     ],
@@ -336,7 +336,7 @@
       "name2": "Reporter",
       "switchIndex": 3,
       "dialogueTexts": [
-       "{s}Voices overlap; no one waits to finish a sentence.  For now, you listen.",
+       "{s}Voices overlap; no one waits to finish a sentence. For now, you listen.",
        "{s}A journalist scrolls on a tablet.",
        "Jobs, that’s the first thing people ask about. Not next year. Now.",
        "{s}Another reporter adds:",
@@ -366,7 +366,7 @@
        "{s}You take a nearby seat. For now, you listen.",
        "{s}A local delegate tells a small group.",
        "Education always sounds safe. No one wants to be against it. But it depends on who actually gets access.",
-       "{y}[What do you mean by access?",
+       "{y}What do you mean by access?",
        "Who can afford it. Who gets in. Who has to leave home for a chance.",
        "Alex Morgan supports more public funding—community colleges, public universities, lower costs for local students.",
        "But it means higher public spending, and not everyone sees the benefit right away.",
@@ -524,9 +524,9 @@
   "narrative": {
    "chapter": "Chapter 2\n\nInside the Party",
    "intro": "The lights turn on.\n\nThe stage feels higher than you expected.\n\nYou\nstand on one side.\n\nYour opponent stands on the other.\n\nThe\nmoderator signals the start.",
-   "win": null,
-   "lose": null,
-   "transit": "The room grows quiet as the debate ends.\n\nConversations drift away\nfrom you, toward your opponent.\nScreens and note pads do not move in your\nfavor.\nSupport does not shift; delegates begin to stand, already thinking\nabout the next speaker.\n\nThis path closes—for now.\nYou step off\nthe stage with your cards and your missteps, and the only option left is\nto restart.",
+   "win": "The debate closes, but not everything ends.\n\nSome delegates remain seated, talking in low voices.\nOthers come closer, asking questions instead of walking away.\n\nSupport does not flood toward you, but it gathers—\nsteadier than applause.\n\nWhen you leave the stage, you are someone they will follow.",
+   "lose": "The room grows quiet as the debate ends.\n\nConversations drift away from you, toward your opponent.\nDelegates begin to stand, already thinking about the next speaker.\n\nThis path closes—for now.",
+   "transit": "This is the primary election.\n\nNot every voter is here—only members, delegates, insiders.\nThey are choosing who will carry their banner forward.\n\nEvery card you play tells your own side\nwhat kind of candidate you are.",
    "chosen": null,
    "all": [
     "Chapter 2\n\nInside the Party",
@@ -578,7 +578,7 @@
       "name2": "Journalist",
       "switchIndex": 3,
       "dialogueTexts": [
-       "{s}Voices overlap; no one waits to finish a sentence.  For now, you listen.",
+       "{s}Voices overlap; no one waits to finish a sentence. For now, you listen.",
        "{s}A reporter scrolls on a tablet.",
        "Everyone promises growth, but growth doesn’t feel the same to everyone.",
        "{s}Another journalist adds:",
@@ -609,7 +609,7 @@
        "{s}You take a nearby seat. For now, you listen.",
        "{s}A local delegate tells a small group.",
        "Education always sounds safe. No one wants to be against it. But it depends on who actually gets access.",
-       "{y}[What do you mean by access?",
+       "{y}What do you mean by access?",
        "{s}A different delegate folds his arms.",
        "Rebecca Hayes prefers private and local solutions.",
        "Private colleges, training tied to businesses. It can move faster and use less public money.",
@@ -769,9 +769,9 @@
   "narrative": {
    "chapter": "Chapter 2\n\nInside the Party",
    "intro": "The lights turn on.\n\nThe stage feels higher than you expected.\n\nYou\nstand on one side.\n\nYour opponent stands on the other.\n\nThe\nmoderator signals the start.",
-   "win": null,
-   "lose": null,
-   "transit": "The room grows quiet as the debate ends.\n\nConversations drift away\nfrom you, toward your opponent.\nScreens and note pads do not move in your\nfavor.\nSupport does not shift; delegates begin to stand, already thinking\nabout the next speaker.\n\nThis path closes—for now.\nYou step off\nthe stage with your cards and your missteps, and the only option left is\nto restart.",
+   "win": "The debate closes, but not everything ends.\n\nSome delegates remain seated, talking in low voices.\nOthers come closer, asking questions instead of walking away.\n\nSupport does not flood toward you, but it gathers—\nsteadier than applause.\n\nWhen you leave the stage, you are someone they will follow.",
+   "lose": "The room grows quiet as the debate ends.\n\nConversations drift away from you, toward your opponent.\nDelegates begin to stand, already thinking about the next speaker.\n\nThis path closes—for now.",
+   "transit": "This is the primary election.\n\nNot every voter is here—only members, delegates, insiders.\nThey are choosing who will carry their banner forward.\n\nEvery card you play tells your own side\nwhat kind of candidate you are.",
    "chosen": null,
    "all": [
     "Chapter 2\n\nInside the Party",
@@ -894,7 +894,7 @@
      "{s}Time for your last call.",
      "{s}Four years.",
      "{s}You cannot promise everything. You cannot avoid the question:",
-     "{s}If you must act on one category first,  Where will the nation’s strength go?",
+     "{s}If you must act on one category first, Where will the nation’s strength go?",
      "{s}This is the final judgment, the one that matters most.",
      "{s}Choose a card."
     ],
@@ -962,8 +962,8 @@
    "chapter": "Chapter 3\n\nNational Speech",
    "intro": "The lights turn on.\n\nYou know every sentence will be interpreted.\n\nEvery\npause will be examined.\n\nThe nation is watching,\n\nwaiting\nfor you to speak.",
    "win": "People stand for you.\n\nSome applaud,\nothers nod in silence.\n\n“They\nlistened.”\n“They understood.”\n\nYou stand at the front.\n\nThe flag of the nation is now behind you.\n\nCameras flash.\n\nElected.",
-   "lose": null,
-   "transit": "The audience begins to disperse.\nConversation overtakes applause.\n\nYou\nremain on the stage.\n\n“They heard you.”\n“But they chose\nsomeone else.”\n\nNot this time.",
+   "lose": "The audience begins to disperse.\nConversation overtakes applause.\n\nYou remain on the stage.\n\n“They heard you.”\n“But they chose someone else.”\n\nNot this time.",
+   "transit": "Now is the general election.\n\nThe country is watching.\nPeople do not want every detail—\nthey want your direction, your priorities, your limits.\n\nYou bring six cards to the national stage.\nEach choice shows who you protect,\nwhat risks you accept,\nand where the nation will move first.",
    "chosen": null,
    "all": [
     "Chapter 3\n\nNational Speech",
@@ -1086,7 +1086,7 @@
      "{s}Time for your last call.",
      "{s}Four years.",
      "{s}You cannot promise everything. You cannot avoid the question:",
-     "{s}If you must act on one category first,  Where will the nation’s strength go?",
+     "{s}If you must act on one category first, Where will the nation’s strength go?",
      "{s}This is the final judgment, the one that matters most.",
      "{s}Choose a card."
     ],
@@ -1154,8 +1154,8 @@
    "chapter": "Chapter 3\n\nNational Speech",
    "intro": "The lights turn on.\n\nYou know every sentence will be interpreted.\n\nEvery\npause will be examined.\n\nThe nation is watching,\n\nwaiting\nfor you to speak.",
    "win": "People stand for you.\n\nSome applaud,\nothers nod in silence.\n\n“They\nlistened.”\n“They understood.”\n\nYou stand at the front.\n\nThe flag of the nation is now behind you.\n\nCameras flash.\n\nElected.",
-   "lose": null,
-   "transit": "The audience begins to disperse.\nConversation overtakes applause.\n\nYou\nremain on the stage.\n\n“They heard you.”\n“But they chose\nsomeone else.”\n\nNot this time.",
+   "lose": "The audience begins to disperse.\nConversation overtakes applause.\n\nYou remain on the stage.\n\n“They heard you.”\n“But they chose someone else.”\n\nNot this time.",
+   "transit": "Now is the general election.\n\nThe country is watching.\nPeople do not want every detail—\nthey want your direction, your priorities, your limits.\n\nYou bring six cards to the national stage.\nEach choice shows who you protect,\nwhat risks you accept,\nand where the nation will move first.",
    "chosen": null,
    "all": [
     "Chapter 3\n\nNational Speech",
