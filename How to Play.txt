@@ -1,0 +1,44 @@
+PRESIDENTIAL ELECTION SIMULATOR — Beta v1.4.1
+=============================================
+
+A political-campaign adventure + card-debate game: gather opinions in the
+neighborhood, pick your party, answer debate questions with your cards, and
+win five rounds per chapter — all the way to the presidency.
+
+HOW TO RUN
+----------
+After unzipping this folder:
+
+  * Mac:      double-click "Start Game.command" — the game opens in your browser.
+  * Windows:  open a terminal in this folder and run:
+                  python -m http.server 8800
+              then open  http://localhost:8800/  in your browser.
+              (Requires Python installed.)
+
+  ! Do NOT double-click index.html directly — browser security blocks the
+    game data from loading. Use one of the methods above.
+
+COLLECT ALL THE EVIDENCE in a chapter, rate the game, and you will receive
+a one-time lottery code — submit it to the organizer to enter the prize draw.
+
+You can also play online (no download needed):
+  https://ifromyx1980.github.io/campaign-game/
+
+TIPS
+----
+  * Best played in a desktop browser (Chrome / Edge / Safari).
+  * On a phone, rotate to landscape.
+  * INVESTIGATION: use the arrows to move between locations, click characters
+    to talk and collect evidence cards. Progress is shown at the top.
+  * DEBATE: listen to the crowd's hint in the banner, then read each card's
+    text to judge what kind of answer it is — cards are deliberately unlabeled.
+    Answers that resonate with your party earn a bonus (revealed after you play).
+    Every card can be used every round.
+  * Lost a debate? Hit Retry.
+  * Bottom-left buttons: "art" switches between anime and photo art styles;
+    "opening" switches between three different intros.
+
+FEEDBACK
+--------
+If you hit a black screen or an error, please take a screenshot (with your
+device + browser info) and send it to the person who shared this game. Enjoy!
