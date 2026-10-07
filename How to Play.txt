@@ -18,9 +18,6 @@ After unzipping this folder:
   ! Do NOT double-click index.html directly — browser security blocks the
     game data from loading. Use one of the methods above.
 
-COLLECT ALL THE EVIDENCE in a chapter, rate the game, and you will receive
-a one-time lottery code — submit it to the organizer to enter the prize draw.
-
 You can also play online (no download needed):
   https://ifromyx1980.github.io/campaign-game/
 
