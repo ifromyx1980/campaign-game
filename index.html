@@ -166,6 +166,7 @@
   #rotateHint .rtx{font-size:22px; line-height:1.6;}
   @media (orientation:portrait) and (max-width:700px){ #rotateHint{display:flex;} }
   #devbar{position:fixed; bottom:8px; left:8px; z-index:200; font-family:monospace; font-size:12px; color:#888;}
+  #devbar button{display:none !important;} /* 发布版：隐藏全部调试按钮 */
   @media (max-height:540px){ #devbar{display:none;} } /* 手机横屏太矮，调试栏会压住手牌 */
   #devbar button{font-size:12px; margin-left:6px; background:#222; color:#bbb; border:1px solid #444; border-radius:5px; cursor:pointer; padding:2px 8px;}
   /* ---- new opening: cold open + motivation ---- */
@@ -292,8 +293,8 @@
   <button id="artToggle">art: ANIME</button>
   <button id="openToggle">opening: CINE</button>
   <button id="toTitleBtn">↺ title</button>
-  <button id="hudToggle" style="display:none">toggle score HUD</button>
-  <button id="skipBtn" style="display:none">skip to battle</button>
+  <button id="hudToggle">toggle score HUD</button>
+  <button id="skipBtn">skip to battle</button>
 </div>
 
 <script>
@@ -312,7 +313,7 @@ const QTYPE_META=[
 // 注意：这是纯前端网页，分数可被改、码算法在源码里——签名只挡“随手乱填/手抖打错”，挡不住会扒源码的人。
 // 真正的公平性请在「外部登记表」按 姓名/学号 去重（每人仅一次有效），并用 抽奖核验.html 核验每个码。
 const LOTTERY = {
-  enabled: false,   // 无问卷版：集齐线索后不再弹评分/抽奖码，直接进入剧情
+  enabled: false,   // 无问卷版：不弹评分/抽奖码
   // ★ apiBase：抽奖后端地址（lottery-server）。填了就走「服务器真发真核销」(在线，伪造不了)；
   //   留空则用本地签名码(离线模式，配 抽奖核验.html 校验)。例：'https://你的域名' 或 'http://localhost:8799'
   apiBase: '',
@@ -1005,7 +1006,7 @@ async function boot(){
   // title bg
   $('titleScreen').style.backgroundImage=`url('${img('title.png')}')`;
   showScreen('titleScreen');
-  $('devinfo').textContent='beta v1.4.1 · survey-free';
+  $('devinfo').textContent='beta v1.4.2 · survey-free';
   // title music on first interaction
   document.body.addEventListener('pointerdown',()=>{ if(G.state==='title') playBGM('title.mp3'); },{once:true});
   // 玩家停在标题页时后台预热：开场动画用图(固定动漫版) + 第一章全部美术——慢网络下首局也不空场
